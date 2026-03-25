@@ -1,0 +1,59 @@
+{
+  "app": {
+    "title": "Designer Drift"
+  },
+  "chips": {
+    "01": "I wasn't invited to the design meeting",
+    "02": "I did research, nobody cares",
+    "03": "I was excluded from strategic meetings",
+    "04": "I was left alone for stakeholder management",
+    "05": "I was overruled by hierarchy",
+    "06": "My promotion was refused with no explanation"
+  },
+  "entry": {
+    "title": "What happened?",
+    "subtitle": "Select what triggered you today",
+    "no_match": "This doesn't match what happened?"
+  },
+  "followup": {
+    "subtitle": "Which sounds closer?",
+    "option_a": "Decisions were made about my design work without me",
+    "option_b": "My strategic role was not recognized"
+  },
+  "nav": {
+    "investigate": "If you want to investigate further"
+  },
+  "scenarios": {
+    "title": "All situations",
+    "subtitle": "One of these will feel familiar.",
+    "sections_count": "4 sections"
+  },
+  "scenario_detail": {
+    "sections": {
+      "recognition": {
+        "label": "RECOGNITION",
+        "heading": "When this happens"
+      },
+      "workaround": {
+        "label": "YOUR WORKAROUND",
+        "heading": "What most designers do"
+      },
+      "neuroscience": {
+        "label": "NEUROSCIENCE",
+        "heading": "What's happening in your brain"
+      },
+      "root_cause": {
+        "label": "THE ROOT CAUSE",
+        "heading": "The source of pain"
+      }
+    },
+    "footer": {
+      "prompt": "This doesn't quite match what happened?",
+      "link": "See other situations →"
+    }
+  },
+  "exit": {
+    "acknowledgment": "This pattern will repeat. You've started to see what's driving it. Keep recognizing it.",
+    "investigate": "If you want to investigate further"
+  }
+}
