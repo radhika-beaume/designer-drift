@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import EntryScreen from './screens/EntryScreen.jsx'
 import ScenarioList from './screens/ScenarioList.jsx'
 import ScenarioDetail from './screens/ScenarioDetail.jsx'
@@ -12,14 +13,17 @@ function NotFoundRedirect() {
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<EntryScreen />} />
-      <Route path="/scenarios" element={<ScenarioList />} />
-      <Route path="/scenario/:slug" element={<ScenarioDetail />} />
-      <Route path="/followup" element={<FollowupScreen />} />
-      <Route path="/exit" element={<ExitFlow />} />
-      <Route path="*" element={<NotFoundRedirect />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<EntryScreen />} />
+        <Route path="/scenarios" element={<ScenarioList />} />
+        <Route path="/scenario/:slug" element={<ScenarioDetail />} />
+        <Route path="/followup" element={<FollowupScreen />} />
+        <Route path="/exit" element={<ExitFlow />} />
+        <Route path="*" element={<NotFoundRedirect />} />
+      </Routes>
+      <Analytics />
+    </>
   )
 }
 
