@@ -1,8 +1,10 @@
 import { MdArrowBack, MdMenuBook } from 'react-icons/md'
+import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import LanguageToggle from '../components/LanguageToggle.jsx'
 import { scenarios } from '../data/scenarios.js'
+import { duration } from '../motion.js'
 
 export default function ScenarioList() {
   const { t } = useTranslation()
@@ -30,21 +32,23 @@ export default function ScenarioList() {
       >
         <div className="mx-auto w-full max-w-md" style={{ padding: '16px 16px 12px 16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <button
-              type="button"
-              onClick={() => navigate(typeof backTo === 'string' ? withLang(backTo) : backTo)}
-              aria-label={t('nav.back', { defaultValue: 'Back' })}
-              style={{
-                width: '44px',
-                height: '44px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--text-primary)',
-              }}
-            >
-              <MdArrowBack size={22} />
-            </button>
+            <motion.div whileTap={{ scale: 0.97 }} transition={{ duration: duration(100) }}>
+              <button
+                type="button"
+                onClick={() => navigate(typeof backTo === 'string' ? withLang(backTo) : backTo)}
+                aria-label={t('nav.back', { defaultValue: 'Back' })}
+                style={{
+                  width: '44px',
+                  height: '44px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--text-primary)',
+                }}
+              >
+                <MdArrowBack size={22} />
+              </button>
+            </motion.div>
 
             <LanguageToggle variant="light" />
           </div>

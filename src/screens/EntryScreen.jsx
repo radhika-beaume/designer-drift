@@ -1,7 +1,9 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { motion } from 'framer-motion'
 import Chip from '../components/Chip.jsx'
 import LanguageToggle from '../components/LanguageToggle.jsx'
+import { duration, easeOut, reducedMotion } from '../motion.js'
 
 export default function EntryScreen() {
   const location = useLocation()
@@ -47,6 +49,28 @@ export default function EntryScreen() {
       to: '/scenario/opaque-evaluation',
     },
   ]
+
+  const containerVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: duration(50),
+        delayChildren: 0,
+      },
+    },
+  }
+
+  const chipVariants = {
+    hidden: { opacity: 0, y: reducedMotion ? 0 : 8 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: duration(260),
+        ease: easeOut,
+      },
+    },
+  }
 
   return (
     <div className="flex min-h-screen flex-col" style={{ backgroundColor: 'var(--background)' }}>
@@ -100,19 +124,25 @@ export default function EntryScreen() {
         </div>
       </header>
 
-      <div className="mx-auto flex w-full max-w-md flex-col gap-4 px-4 py-6">
+      <motion.div
+        className="mx-auto flex w-full max-w-md flex-col gap-4 px-4 py-6"
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+      >
         {chips.map((chip) => (
-          <Chip
-            key={chip.key}
-            number={chip.number}
-            label={t(chip.labelKey)}
-            onClick={() => {
-              const isScenario = typeof chip.to === 'string' && chip.to.startsWith('/scenario/')
-              navigate(withLang(chip.to), isScenario ? { state: { from: 'entry' } } : undefined)
-            }}
-          />
+          <motion.div key={chip.key} variants={chipVariants}>
+            <Chip
+              number={chip.number}
+              label={t(chip.labelKey)}
+              onClick={() => {
+                const isScenario = typeof chip.to === 'string' && chip.to.startsWith('/scenario/')
+                navigate(withLang(chip.to), isScenario ? { state: { from: 'entry' } } : undefined)
+              }}
+            />
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   )
 }

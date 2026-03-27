@@ -1,9 +1,12 @@
 import React from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { MdArrowBack, MdArrowForward, MdExpandLess, MdExpandMore, MdModeOfTravel } from 'react-icons/md'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import LanguageToggle from '../components/LanguageToggle.jsx'
+import MotionLink from '../components/MotionLink.jsx'
 import { scenarios } from '../data/scenarios.js'
+import { easeIn, easeOut, reducedMotion, spring, duration } from '../motion.js'
 
 function findScenarioBySlug(slug) {
   return scenarios.find((s) => s.slug === slug) || null
@@ -397,6 +400,23 @@ function AccordionItem({ label, heading, isOpen, onToggle, position, children })
   const isFirst = position === 'first'
   const isLast = position === 'last'
 
+  const headerRef = React.useRef(null)
+  const [ripples, setRipples] = React.useState([])
+
+  const addRipple = (event) => {
+    if (reducedMotion) return
+    const el = headerRef.current
+    if (!el) return
+
+    const rect = el.getBoundingClientRect()
+    const x = (event.clientX ?? rect.left + rect.width / 2) - rect.left
+    const y = (event.clientY ?? rect.top + rect.height / 2) - rect.top
+    const size = Math.max(rect.width, rect.height) * 2
+    const id = `${Date.now()}-${Math.random()}`
+
+    setRipples((prev) => [...prev, { id, x, y, size }])
+  }
+
   const headerRadii = {
     borderTopLeftRadius: isFirst ? '8px' : 0,
     borderTopRightRadius: isFirst ? '8px' : 0,
@@ -411,9 +431,11 @@ function AccordionItem({ label, heading, isOpen, onToggle, position, children })
 
   return (
     <section>
-      <button
+      <motion.button
+        ref={headerRef}
         type="button"
         onClick={onToggle}
+        onPointerDown={addRipple}
         style={{
           width: '100%',
           backgroundColor: 'var(--surface-light)',
@@ -426,8 +448,47 @@ function AccordionItem({ label, heading, isOpen, onToggle, position, children })
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: '12px',
+          position: 'relative',
+          overflow: 'hidden',
         }}
+        whileTap={{ scale: 0.97, backgroundColor: '#e8d8ce' }}
+        animate={{ scale: 1, backgroundColor: 'var(--surface-light)' }}
+        transition={
+          reducedMotion
+            ? { duration: 0 }
+            : {
+                scale: { ...spring, duration: duration(100) },
+                backgroundColor: { duration: duration(100), ease: 'easeOut' },
+              }
+        }
       >
+        <div
+          aria-hidden="true"
+          style={{ position: 'absolute', inset: 0, overflow: 'hidden', ...headerRadii, pointerEvents: 'none' }}
+        >
+          <AnimatePresence>
+            {ripples.map((r) => (
+              <motion.span
+                key={r.id}
+                initial={{ scale: 0, opacity: 1 }}
+                animate={{ scale: 1, opacity: 0 }}
+                exit={{ opacity: 0 }}
+                transition={reducedMotion ? { duration: 0 } : { duration: duration(400), ease: 'easeOut' }}
+                onAnimationComplete={() => setRipples((prev) => prev.filter((p) => p.id !== r.id))}
+                style={{
+                  position: 'absolute',
+                  width: `${r.size}px`,
+                  height: `${r.size}px`,
+                  left: `${r.x - r.size / 2}px`,
+                  top: `${r.y - r.size / 2}px`,
+                  borderRadius: '9999px',
+                  backgroundColor: 'rgba(46,39,36,0.12)',
+                }}
+              />
+            ))}
+          </AnimatePresence>
+        </div>
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
           <div
             style={{
@@ -456,22 +517,62 @@ function AccordionItem({ label, heading, isOpen, onToggle, position, children })
           </div>
         </div>
 
-        <span style={{ color: 'var(--text-primary)', display: 'inline-flex' }}>
-          {isOpen ? <MdExpandLess size={22} /> : <MdExpandMore size={22} />}
-        </span>
-      </button>
-
-      {isOpen ? (
-        <div
-          style={{
-            backgroundColor: 'var(--background)',
-            padding: '16px',
-            ...bodyRadii,
-          }}
+        <motion.span
+          style={{ color: 'var(--text-primary)', display: 'inline-flex' }}
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={
+            reducedMotion
+              ? { duration: 0 }
+              : {
+                  duration: duration(280),
+                  ease: isOpen ? easeOut : easeIn,
+                }
+          }
         >
-          <div style={{ padding: '12px', textAlign: 'left' }}>{children}</div>
-        </div>
-      ) : null}
+          <MdExpandMore size={22} />
+        </motion.span>
+      </motion.button>
+
+      <AnimatePresence initial={false}>
+        {isOpen ? (
+          <motion.div
+            key="accordion-body"
+            initial={{ height: 0, opacity: 0 }}
+            animate={
+              reducedMotion
+                ? { height: 'auto', opacity: 1 }
+                : {
+                    height: 'auto',
+                    opacity: 1,
+                    transition: {
+                      height: { ...spring, stiffness: 260, damping: 28, duration: duration(280) },
+                      opacity: { duration: duration(280), ease: easeOut },
+                    },
+                  }
+            }
+            exit={
+              reducedMotion
+                ? { height: 0, opacity: 0 }
+                : {
+                    height: 0,
+                    opacity: 0,
+                    transition: {
+                      height: { duration: duration(280), ease: easeIn },
+                      opacity: { duration: duration(280), ease: easeIn },
+                    },
+                  }
+            }
+            style={{
+              backgroundColor: 'var(--background)',
+              padding: '16px',
+              ...bodyRadii,
+              overflow: 'hidden',
+            }}
+          >
+            <div style={{ padding: '12px', textAlign: 'left' }}>{children}</div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </section>
   )
 }
@@ -514,26 +615,51 @@ export default function ScenarioDetail() {
       })
     : []
 
+  const accordionContainerVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: duration(30),
+      },
+    },
+  }
+
+  const accordionHeaderVariants = {
+    hidden: { opacity: 0, y: reducedMotion ? 0 : 8 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: duration(260),
+        ease: easeOut,
+      },
+    },
+  }
+
   return (
     <div className="flex min-h-screen flex-col" style={{ backgroundColor: 'var(--background)' }}>
       <header style={{ backgroundColor: 'var(--text-primary)', width: '100%', overflow: 'hidden' }}>
         <div className="mx-auto w-full max-w-md" style={{ padding: '16px 16px 12px 16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <button
-              type="button"
-              onClick={() => navigate(withLang(backTo))}
-              aria-label={t('nav.back', { defaultValue: 'Back' })}
-              style={{
-                width: '44px',
-                height: '44px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--text-light)',
-              }}
-            >
-              <MdArrowBack size={22} />
-            </button>
+            <motion.div whileTap={{ scale: 0.97 }} transition={{ duration: duration(100) }}>
+              <button
+                type="button"
+                onClick={() => navigate(withLang(backTo))}
+                aria-label={t('nav.back', { defaultValue: 'Back' })}
+                style={{
+                  border: 'none',
+                  background: 'transparent',
+                  width: '44px',
+                  height: '44px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--text-light)',
+                }}
+              >
+                <MdArrowBack size={22} />
+              </button>
+            </motion.div>
 
             <LanguageToggle variant="dark" />
           </div>
@@ -571,95 +697,110 @@ export default function ScenarioDetail() {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-md" style={{ padding: '0 16px', marginTop: '36px' }}>
+      <motion.main
+        className="mx-auto w-full max-w-md"
+        style={{ padding: '0 16px', marginTop: '36px' }}
+        variants={accordionContainerVariants}
+        initial="hidden"
+        animate="show"
+      >
         {sectionDefs.map((s, idx) => (
-          <AccordionItem
-            key={s.key}
-            label={s.label}
-            heading={s.heading}
-            isOpen={openKey === s.key}
-            onToggle={() => setOpenKey((prev) => (prev === s.key ? null : s.key))}
-            position={
-              idx === 0 ? 'first' : idx === sectionDefs.length - 1 ? 'last' : 'middle'
-            }
-          >
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {renderBlocks(s.blocks)}
-            </div>
-          </AccordionItem>
+          <motion.div key={s.key} variants={accordionHeaderVariants}>
+            <AccordionItem
+              label={s.label}
+              heading={s.heading}
+              isOpen={openKey === s.key}
+              onToggle={() => setOpenKey((prev) => (prev === s.key ? null : s.key))}
+              position={
+                idx === 0 ? 'first' : idx === sectionDefs.length - 1 ? 'last' : 'middle'
+              }
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {renderBlocks(s.blocks)}
+              </div>
+            </AccordionItem>
+          </motion.div>
         ))}
-      </main>
+      </motion.main>
 
       <footer className="mx-auto w-full max-w-md" style={{ padding: '16px 16px 24px 16px' }}>
-        <button
-          type="button"
-          onClick={() =>
-            navigate(withLang('/scenarios'), { state: { fromScenarioPath: location.pathname } })
-          }
-          style={{
-            border: 'none',
-            background: 'transparent',
-            padding: 0,
-            textAlign: 'left',
-            width: '100%',
-            fontFamily: 'Source Sans 3',
-            fontWeight: 400,
-            fontSize: '14px',
-            lineHeight: '22px',
-            color: 'var(--text-primary)',
-            marginBottom: '4px',
-          }}
-        >
-          {t('scenario_detail.footer.prompt')}
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            navigate(withLang('/scenarios'), { state: { fromScenarioPath: location.pathname } })
-          }
-          style={{
-            border: 'none',
-            background: 'transparent',
-            padding: 0,
-            textAlign: 'left',
-            width: '100%',
-            fontFamily: 'Source Sans 3',
-            fontWeight: 600,
-            fontSize: '14px',
-            lineHeight: '22px',
-            color: 'var(--accent)',
-            marginBottom: '16px',
-          }}
-        >
-          {t('scenario_detail.footer.link')}
-        </button>
+        <MotionLink style={{ display: 'block', width: '100%' }}>
+          <button
+            type="button"
+            onClick={() =>
+              navigate(withLang('/scenarios'), { state: { fromScenarioPath: location.pathname } })
+            }
+            style={{
+              border: 'none',
+              background: 'transparent',
+              padding: 0,
+              textAlign: 'left',
+              width: '100%',
+              fontFamily: 'Source Sans 3',
+              fontWeight: 400,
+              fontSize: '14px',
+              lineHeight: '22px',
+              color: 'var(--text-primary)',
+              marginBottom: '4px',
+            }}
+          >
+            {t('scenario_detail.footer.prompt')}
+          </button>
+        </MotionLink>
+        <MotionLink style={{ display: 'block', width: '100%' }}>
+          <button
+            type="button"
+            onClick={() =>
+              navigate(withLang('/scenarios'), { state: { fromScenarioPath: location.pathname } })
+            }
+            style={{
+              border: 'none',
+              background: 'transparent',
+              padding: 0,
+              textAlign: 'left',
+              width: '100%',
+              fontFamily: 'Source Sans 3',
+              fontWeight: 600,
+              fontSize: '14px',
+              lineHeight: '22px',
+              color: 'var(--accent)',
+              marginBottom: '16px',
+            }}
+          >
+            {t('scenario_detail.footer.link')}
+          </button>
+        </MotionLink>
 
-        <button
-          type="button"
-          onClick={() =>
-            navigate(withLang('/exit'), { state: { fromScenarioPath: location.pathname } })
-          }
-          style={{
-            border: 'none',
-            background: 'transparent',
-            padding: 0,
-            textAlign: 'left',
-            width: '100%',
-            fontFamily: 'Source Sans 3',
-            fontWeight: 600,
-            fontSize: '14px',
-            lineHeight: '22px',
-            color: '#077A98',
-            textDecoration: 'underline',
-            marginTop: '6px',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-          }}
-        >
-          <span>{t('nav.investigate')}</span>
-          <MdArrowForward size={16} color={'#077A98'} />
-        </button>
+        <MotionLink style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          <button
+            type="button"
+            onClick={() =>
+              navigate(withLang('/exit'), { state: { fromScenarioPath: location.pathname } })
+            }
+            style={{
+              border: 'none',
+              background: 'transparent',
+              padding: 0,
+              textAlign: 'left',
+              width: '100%',
+              fontFamily: 'Source Sans 3',
+              fontWeight: 600,
+              fontSize: '14px',
+              lineHeight: '22px',
+              color: '#077A98',
+              textDecoration: 'underline',
+              marginTop: '6px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+          >
+            <span>{t('nav.investigate')}</span>
+            <span style={{ display: 'inline-flex' }}>
+              <MdArrowForward size={16} color={'#077A98'} />
+            </span>
+          </button>
+        </MotionLink>
       </footer>
     </div>
   )

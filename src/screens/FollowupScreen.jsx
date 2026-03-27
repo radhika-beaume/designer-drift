@@ -1,8 +1,10 @@
 import { MdArrowBack } from 'react-icons/md'
+import { motion } from 'framer-motion'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import LanguageToggle from '../components/LanguageToggle.jsx'
 import Chip from '../components/Chip.jsx'
+import { duration } from '../motion.js'
 
 export default function FollowupScreen() {
   const location = useLocation()
@@ -20,21 +22,23 @@ export default function FollowupScreen() {
       <header style={{ backgroundColor: 'var(--text-primary)', width: '100%', overflow: 'hidden' }}>
         <div className="mx-auto w-full max-w-md" style={{ padding: '16px 16px 12px 16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <button
-              type="button"
-              onClick={() => navigate(withLang('/'))}
-              aria-label={t('nav.back', { defaultValue: 'Back' })}
-              style={{
-                width: '44px',
-                height: '44px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--text-light)',
-              }}
-            >
-              <MdArrowBack size={22} />
-            </button>
+            <motion.div whileTap={{ scale: 0.97 }} transition={{ duration: duration(100) }}>
+              <button
+                type="button"
+                onClick={() => navigate(withLang('/'))}
+                aria-label={t('nav.back', { defaultValue: 'Back' })}
+                style={{
+                  width: '44px',
+                  height: '44px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--text-light)',
+                }}
+              >
+                <MdArrowBack size={22} />
+              </button>
+            </motion.div>
 
             <LanguageToggle variant="dark" />
           </div>
