@@ -8,11 +8,14 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        cacheId: 'designer-drift-v2',
+      },
       manifest: {
         name: 'Designer Drift',
         short_name: 'Designer Drift',
         theme_color: '#2E2724',
-        background_color: '#F5EDE6',
+        background_color: '#2E2724',
         display: 'standalone',
         icons: [{ src: '/icon-192.png', sizes: '192x192', type: 'image/png' }],
       },
