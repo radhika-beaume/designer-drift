@@ -25,7 +25,7 @@ export default function ExitFlow() {
         alt=""
         aria-hidden="true"
         style={{
-          width: '100%',
+          width: '100vw',
           height: '100vh',
           objectFit: 'cover',
           position: 'absolute',
@@ -46,9 +46,9 @@ export default function ExitFlow() {
         <h1
           style={{
             position: 'absolute',
-            top: '134px',
+            top: '17vh',
             left: '16px',
-            width: '358px',
+            right: '16px',
             fontFamily: "'Lora', serif",
             fontWeight: 500,
             fontSize: '32px',
