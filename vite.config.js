@@ -11,8 +11,6 @@ export default defineConfig({
       manifest: {
         name: 'Designer Drift',
         short_name: 'Designer Drift',
-        start_url: '/',
-        scope: '/',
         theme_color: '#2E2724',
         background_color: '#F5EDE6',
         display: 'standalone',

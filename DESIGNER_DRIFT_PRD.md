@@ -60,19 +60,30 @@ Configure vite-plugin-pwa to enable Add to Home Screen on mobile. This is the pr
 
 ```js
 // vite.config.js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
-plugins: [VitePWA({
-  registerType: 'autoUpdate',
-  manifest: {
-    name: 'Designer Drift',
-    short_name: 'Designer Drift',
-    theme_color: '#2E2724',
-    background_color: '#F5EDE6',
-    display: 'standalone',
-    icons: [{ src: '/icon-192.png', sizes: '192x192', type: 'image/png' }]
-  }
-})]
+export default defineConfig({
+  plugins: [
+    react(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      manifest: {
+        name: 'Designer Drift',
+        short_name: 'Designer Drift',
+        theme_color: '#2E2724',
+        background_color: '#F5EDE6',
+        display: 'standalone',
+        orientation: 'portrait',
+        icons: [
+          { src: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: '/icon-512.png', sizes: '512x512', type: 'image/png' }
+        ]
+      }
+    })
+  ]
+})
 ```
 
 ---
@@ -87,8 +98,8 @@ plugins: [VitePWA({
 | --surface-light | #F5EDE6 | Tappable surfaces: chips, accordion headers, cards |
 | --border-chips | #E4AD86 | Chip border (bottom only), pill outlines, dividers |
 | --text-primary | #2E2724 | Primary text, dark header band background |
-| --text-secondary | #4F433E | Secondary text in pills, quotes, chip numbers |
-| --text-light | #F5EDE6 | Text on dark (#2E2724) backgrounds |
+| --text-secondary | #4F433E | Secondary text in pills, quotes|
+| --text-light | #F6E9CD | Text on dark (#2E2724) backgrounds |
 | --accent | #077A98 | Links, labels, active states, borders, toggle active |
 
 ### Global Tappable Rule — NO EXCEPTIONS
@@ -102,9 +113,10 @@ plugins: [VitePWA({
 | Display / Title | Lora | 32px | Bold 700 | 40px | -0.5px |
 | Scenario Title | Lora | 24px | SemiBold 600 | 32px | -0.3px |
 | Body | Source Sans 3 | 16px | Regular 400 | 26px | 0 |
-| Body Small / Subtitle | Source Sans 3 | 14px | Regular 400 | 22px | 0 |
+| Body Small| Source Sans 3 | 14px | Regular 400 | 22px | 0 |
+| Subtitle | Source Sans 3 | 16px | Regular 400 | 26px | 0 |
 | Label / Toggle | Azeret Mono | 10px | Medium 500 | — | 1.5px |
-| Chip number (decorative) | Lora | 32px | Bold 700 | 40px | -0.5px — opacity 30%, color #4F433E |
+
 
 ### 3.3 Spacing & Radius
 
@@ -126,7 +138,7 @@ plugins: [VitePWA({
   --border-chips: #E4AD86;
   --text-primary: #2E2724;
   --text-secondary: #4F433E;
-  --text-light: #F5EDE6;
+  --text-light: #F6E9CD;
   --accent: #077A98;
 }
 ```
@@ -179,9 +191,9 @@ The toggle appears on every screen header. It is a small, unobtrusive text eleme
 | Active language | Full opacity |
 | Inactive language | 40% opacity |
 | Separator \| | 40% opacity, static, not tappable |
-| Active language indicator | Small dot under active language: 2px square, border-radius 1px, centered horizontally below the text. Color: #F5EDE6 on dark variant, #2E2724 on light variant. Hidden under inactive language. |
+| Active language indicator | Small dot under active language: 2px square, border-radius 1px, centered horizontally below the text. Color: #F6E9CD on dark variant, #2E2724 on light variant. Hidden under inactive language. |
 | Tap target | Minimum 44×44px invisible touch area around each button |
-| Dark header variant | #F5EDE6 text (Entry, Scenario Detail, Follow-up screens) |
+| Dark header variant | #F6E9CD text (Entry, Scenario Detail, Follow-up screens) |
 | Light header variant | #2E2724 text (Scenario List, Exit Flow screens) |
 | Placement | Every screen header, right-aligned, same row as back arrow |
 | Row layout | justify-between: back arrow left, toggle right |
@@ -225,6 +237,9 @@ Scenario List
 
 Exit Flow
  └─ 'If you want to investigate further →' → [external link — coming soon for MVP]
+
+ Global Navigation Bar (all screens except Entry Screen)
+ └─ Home icon → Entry Screen (/)
 ```
 
 ### 5.3 Back Arrow Behaviour
@@ -238,7 +253,33 @@ Exit Flow
 | Follow-up Question | Entry Screen |
 
 ### 5.4 No Persistent Navigation
-There is no bottom navigation bar, no sidebar, no hamburger menu, and no persistent navigation chrome. Back arrows are the only navigation element on content screens. This is intentional — permanent chrome is the wrong register for emotional content.
+There is no bottom navigation bar, no sidebar, and no hamburger menu. A Global Navigation Bar (Section 5.5) appears on all screens except the Entry Screen — it is minimal (38px, 80% opacity) and contains back navigation, home access, and the language toggle."
+
+### 5.5 Global Navigation Bar
+
+Appears on every screen **except** Entry Screen.
+
+| Property | Value |
+|---|---|
+| Height | 38px |
+| Background | #2E2724 at 80% opacity |
+| Padding | 8px top, 16px left, 16px right |
+| Layout | justify-between: back arrow left, home icon center, language toggle right |
+
+#### Icons
+| Element | Value |
+|---|---|
+| Back arrow | MdArrowBack, 16px, color --text-light (#F6E9CD) |
+| Home icon | MdHome, 16px, color --text-light (#F6E9CD), 44×44px tap target → navigates to Entry Screen (/) |
+| Tap targets | All icons minimum 44×44px |
+
+#### Language Toggle in Nav Bar
+| Element | Value |
+|---|---|
+| EN (active) | Azeret Mono 10px, --text-light (#F6E9CD), full opacity |
+| Active dot | 2px square, border-radius 1px, --text-light (#F6E9CD), centered below EN |
+| Separator \| | --text-light (#F6E9CD), 40% opacity |
+| FR (inactive) | --text-light (#F6E9CD), 40% opacity |
 
 ---
 
@@ -267,12 +308,22 @@ When the user taps Chip 03, they are taken to the Follow-up Question screen befo
 
 ### 6.3 Chip Anatomy
 Each chip has two elements side by side:
-- Number (left): Lora Bold 32px, 30% opacity, color #4F433E — decorative, not interactive
+- Thumbnail (left): 54×54px, border-radius 16px, center-aligned vertically with chip text
 - Text (right): Source Sans 3 Regular 16px, color #2E2724 — the actual chip label
-- Inner container alignment: align-items flex-start (top alignment — NOT center)
-- Gap between number and text: 12px
+- Gap between thumbnail and text: 12px
 
 Chips are single-select only. Tapping a chip immediately navigates — no confirmation state.
+
+#### Chip Thumbnail
+Each chip displays a scenario illustration thumbnail on the left side.
+
+| Property | Value |
+|---|---|
+| Size | 54×54px |
+| Border radius | 16px |
+| Vertical alignment | Center-aligned with chip text |
+| File location | public/thumbnails/ |
+| Filenames | expertise-bypass-thumb.png, strategic-exclusion-thumb.png, authority-override-thumb.png, opaque-evaluation-thumb.png, mixedthumbnail.png |
 
 ---
 
@@ -284,11 +335,11 @@ Figma node: 76:10
 #### Header Band
 | Property | Value |
 |---|---|
-| Background | #2E2724 (full width, dark band) |
+| Background | linear-gradient(to right, #2E2724 0%, #7B4B29 100%)
 | Title text | What happened? |
-| Title font | Lora Bold 32px, color #F5EDE6, letter-spacing -0.5px, whitespace-nowrap |
+| Title font | Lora Bold 32px, color #F6E9CD, letter-spacing -0.5px, whitespace-nowrap |
 | Subtitle text | Select what triggered you today |
-| Subtitle font | Source Sans 3 Regular 14px, color #F5EDE6 |
+| Body Small | Source Sans 3 Regular 14px, color #F5EDE6 |
 | Language toggle | Top right — EN \| FR, Azeret Mono 10px, #F5EDE6 active / 40% opacity inactive |
 | Title row height | 85px, padding: top 16px, right 8px, bottom 8px, left 16px |
 | Subtitle row padding | bottom 8px, left 16px |
@@ -302,9 +353,9 @@ Figma node: 76:10
 | Chip border radius | 8px |
 | Chip padding | 16px horizontal, 12px vertical |
 | Chip width | Full width (stretch to screen minus 16px margins each side = 358px at 390px) |
-| Number style | Lora Bold 32px, 30% opacity, #4F433E, align-items flex-start |
+| Thumbnail | Left side, 54×54px, border-radius 16px, center-aligned vertically|
 | Text style | Source Sans 3 Regular 16px, #2E2724 |
-| Gap between number and text | 12px |
+| Gap between thumbnail and text | 12px |
 | Page background | #DDCFC5 |
 
 **No Match CTA:** This link does NOT appear on the Entry Screen. It appears on the Scenario Detail screen footer, after the user has landed on a scenario.
@@ -314,23 +365,26 @@ Figma node: 76:10
 ### Screen 2 & 3 — Scenario Detail (Collapsed + Open)
 Figma node: 100:366
 
-#### Header Band
+#### Illustration Header
 | Property | Value |
 |---|---|
-| Background | #2E2724 (dark band) |
-| Title text | Scenario name (e.g. 'Expert bypass') — NOT the question |
-| Title font | Lora SemiBold 24px, color #F5EDE6, letter-spacing -0.3px, left-aligned |
-| Subtitle text | Scenario question (e.g. 'If my work doesn't count, do I still count?') |
-| Subtitle font | Source Sans 3 Regular 14px, color #F5EDE6 |
-| Back arrow | Top left, MdArrowBack, color #F5EDE6, 44×44px tap target |
-| Language toggle | Top right, same row as back arrow, #F5EDE6 text |
+| Illustration zone height | 449px, full width |
+| Illustration files | public/illustrations/[scenario-slug].png |
+| Gradient overlay | linear-gradient(to right, #2E2724 0%, #7B4B29 100%) over bottom portion of illustration |
+| Title text | `scenarioTitle` field |
+| Title font | Lora SemiBold 24px, color #F6E9CD, letter-spacing -0.3px, left-aligned |
+| Subtitle text | `title` field (the scenario question) |
+| Subtitle font | Source Sans 3 Regular 16px, color #F6E9CD |
+| Back arrow | Top left, MdArrowBack, #F6E9CD, 44×44px — floats over illustration on dark bar |
+|Home icon | Middle,MdHome,#F6E9CD, 44×44px  — same dark bar |
+| Language toggle | Top right, same row as back arrow, #F6E9CD text — same dark bar |
 
 #### Accordion Sections
 Each scenario has 4 accordion sections. All sections are collapsed by default (Screen 2). Tapping a header opens it (Screen 3). Only one section can be open at a time.
 
 Each accordion section has TWO text elements:
 - **Label** (top): Azeret Mono 10px, uppercase, letter-spacing 1.5px, color #077A98 — category label
-- **Heading** (bottom): Source Sans 3 Regular 16px, color #2E2724 — section title
+- **Heading** (bottom): Lora Medium 500, 20px, #2E2724 — section title
 
 | Section | Label | Heading |
 |---|---|---|
@@ -348,7 +402,7 @@ Each accordion section has TWO text elements:
 | Icon | MdExpandMore (Material) — right aligned, color #2E2724 |
 | Border bottom | 1px solid #077A98 (accent) |
 | Border radius | First accordion: top-left 4px, top-right 4px, bottom-left 0, bottom-right 0. Middle accordions: all corners 0. Last accordion: top-left 0, top-right 0, bottom-left 4px, bottom-right 4px. |
-| Padding | 16px horizontal, 14px vertical |
+| Padding | 8px horizontal, 8px vertical |
 
 #### Accordion Body (Open — NOT Tappable)
 | Property | Value |
@@ -360,8 +414,8 @@ Each accordion section has TWO text elements:
 #### Content Visual Treatments Inside Accordion Body
 Three distinct visual treatments — never use uniform text blocks:
 - **Situation descriptions**: plain paragraphs, Source Sans 3 Regular 16px, #2E2724
-- **Body feelings / emotional states**: pills — hugs content, NOT full width, flows inline with siblings (flex-wrap: wrap, gap: 8px). Border 1px solid #E4AD86, border-radius 16px, padding 4px 12px, Source Sans 3 Regular 14px, #4F433E
-- **Designer quotes**: left border 3px solid #077A98, italic, Source Sans 3 Italic 14px, #4F433E, padding-left 8px
+- **Body feelings / emotional states**: pills — hugs content, NOT full width, flows inline with siblings (flex-wrap: wrap, gap: 8px). Border 1px solid #E4AD86, border-radius 16px, padding 8px 4px, Source Sans 3 Regular 14px, #4F433E
+- **Designer quotes**: left border 3px solid #077A98, italic, Source Sans 3 Regular 16px, #4F433E, padding-left 12px
 
 #### Footer of Scenario Detail
 | Property | Value |
@@ -379,32 +433,32 @@ Three distinct visual treatments — never use uniform text blocks:
 Figma node: Screens page
 
 #### Header
-| Property | Value |
-|---|---|
-| Background | #DDCFC5 |
-| Title text | All situations |
-| Title font | Lora Bold 24px, #2E2724 |
-| Subtitle text | One of these will feel familiar. |
-| Subtitle font | Source Sans 3 Regular 14px, #2E2724 |
-| Back arrow | MdArrowBack, #2E2724, 44×44px tap target |
-| Language toggle | #2E2724 text variant |
-| Header sticky | YES — position: sticky, top: 0, background #DDCFC5, no shadow or border |
+Global Navigation Bar applies — same dark nav bar as all other screens. 'All situations' title and subtitle render as page content below the nav bar, not in a separate sticky header.
 
 #### Scenario Cards
 4 cards, one per scenario, vertically stacked with 16px gap.
 
 | Property | Value |
 |---|---|
+| Card image band | Pre-cropped file from public/illustrations/[scenario-slug]-card.png, height 100px, full card width, object-fit cover, border-radius 8px 8px 0 0 |
 | Card background | #F5EDE6 |
-| Card border | 1px solid #E4AD86, border-radius 8px |
-| Card padding | 16px |
+| Card border | Bottom only — 1px solid #E4AD86 |
+| Card border radius | 4px |
+| Card padding | 16px — applies to content below image band only |
 | No SITUATION label | Cards do NOT have the Azeret Mono SITUATION label |
 | Title | `scenarioTitle` field — Lora Bold, #2E2724 |
-| Description | `trigger` field — Source Sans 3 Regular 14px, #4F433E |
-| Footer | Book/document icon + "4 sections" text — Source Sans 3 Regular 12px, #4F433E |
+| Description | `trigger` field — Source Sans 3 Regular 16px, #4F433E |
+| Footer | Book/document icon + "4 sections" text — Source Sans 3 Regular 14px, #4F433E |
 | Tap behaviour | Full card tappable → navigates to Scenario Detail |
-| No images | No thumbnail, no illustration, no hero image |
 | No reading time | Do not show read time estimates |
+
+#### Scenario Card Image Files
+| Scenario | File |
+|---|---|
+| Expertise Bypass | public/illustrations/expertise-bypass-card.png |
+| Strategic Exclusion | public/illustrations/strategic-exclusion-card.png |
+| Authority Override | public/illustrations/authority-override-card.png |
+| Opaque Evaluation | public/illustrations/opaque-evaluation-card.png |
 
 **4 scenario card titles and descriptions:**
 - Expertise Bypass — "Your work was sidelined. Decisions were made without you, and you're expected to execute them"
@@ -416,33 +470,10 @@ Figma node: Screens page
 
 ### Screen 5 — Exit Flow
 
-#### Header
-| Property | Value |
-|---|---|
-| Background | #DDCFC5 |
-| Back arrow | MdArrowBack, #2E2724 |
-| Language toggle | #2E2724 text variant |
-| Header sticky | YES — position: sticky, top: 0 |
-
-#### Acknowledgment Text
-| Property | Value |
-|---|---|
-| Text | This pattern will repeat. You've started to see what's driving it. Keep recognizing it. |
-| Font | Lora Bold — large display size, color #2E2724 |
-| Alignment | Left, 16px margin |
-
-#### Divider
-A horizontal line divider (#E4AD86) sits between the acknowledgment text and the investigate further link.
-
-#### Investigate Further Link
-| Property | Value |
-|---|---|
-| Icon | Book/document icon, color #077A98 |
-| Text | If you want to investigate further |
-| Arrow | → after text |
-| Style | Source Sans 3, color #077A98, underlined |
-| State for MVP | Active and tappable — links to external Acharya Prashant resources |
-| NOT coming soon | Figma shows this as an active teal link, not greyed out |
+- Full screen illustration: `public/illustrations/exit-flow.png` — covers entire screen background
+- Global Navigation Bar applies — floats over full-screen illustration. Nav bar background #2E2724 at 80% opacity provides separation from illustration."
+- Acknowledgment text: wired from i18n `exit.acknowledgment` — Lora Medium Italic, 32px, line-height 40px, letter-spacing -0.5px, #2E2724, left-aligned, 16px margin, positioned over upper portion of illustration
+- Investigate further link: anchored to bottom of screen, center aligned,  #F5EDE6 background surface, 16px padding, active and tappable for MVP
 
 ---
 
@@ -450,14 +481,13 @@ A horizontal line divider (#E4AD86) sits between the acknowledgment text and the
 Figma node: 100:366
 
 #### Header Band
+Global Navigation Bar applies — same dark nav bar as all other screens.
 | Property | Value |
 |---|---|
-| Background | #2E2724 |
+| Background |linear-gradient(to right, #2E2724 0%, #7B4B29 100%) |
 | No SITUATION label | This screen does NOT have the Azeret Mono SITUATION label |
-| Title | I was excluded from strategic meetings — Lora Bold 24px, letter-spacing -0.3px, color #F5EDE6, left-aligned |
-| Subtitle | Which sounds closer? — Source Sans 3 Regular 14px, color #F5EDE6 |
-| Back arrow | MdArrowBack, #F5EDE6 |
-| Language toggle | #F5EDE6 text variant |
+| Title | I was excluded from strategic meetings — Lora SemiBold 24px, letter-spacing -0.3px, color #F6E9CD, left-aligned |
+| Subtitle | Which sounds closer? — Source Sans 3 Regular 16px, color #F6E9CD |
 
 #### Two-Option Chips
 | Property | Value |
@@ -466,15 +496,18 @@ Figma node: 100:366
 | Option A destination | Scenario 1 → /scenario/expertise-bypass |
 | Option B text | My strategic role was not recognized |
 | Option B destination | Scenario 2 → /scenario/strategic-exclusion |
-| Chip style | Same as Entry Screen chips — #F5EDE6 background, border-bottom #E4AD86, 8px radius |
-| Numbers | Chips have decorative numbers — 01 and 02 — same style as Entry Screen chips |
-
+| Chip style | Same as Entry Screen chips — #F5EDE6 background, border-bottom 1px solid #E4AD86, border-radius 8px |
+| Thumbnail | Left side, 54×54px, border-radius 16px, center-aligned vertically |
+|Option A thumbnail | public/thumbnails/expertise-bypass-thumb.png |
+|Option B thumbnail | public/thumbnails/strategic-exclusion-thumb.png |
+No numbersThese chips do NOT have decorative numbers
 ---
 
 ## 8. Content Data Structure
 
 ### 8.1 Scenario Object
 All scenario content is stored in a static JavaScript/JSON file. No backend, no CMS.
+
 
 ```js
 // src/data/scenarios.js
@@ -483,9 +516,9 @@ export const scenarios = [
     id: 'scenario-1',
     slug: 'expertise-bypass',
     label: 'SITUATION',
-    scenarioTitle: 'Expertise Bypass',                        // renders as card title in Scenario List
-    title: "If my work doesn't count, do I still count?",    // renders as subtitle in Scenario Detail header
-    trigger: "You weren't in the meeting. The decisions were made. You're expected to execute.",  // renders in Scenario Detail header AND Scenario List card description
+    scenarioTitle: 'Expertise Bypass',
+    title: "If my work doesn't count, do I still count?",
+    trigger: "You weren't in the meeting. The decisions were made. You're expected to execute.",
     sections: [
       { id: 'when', sectionLabel: 'RECOGNITION', heading: 'When this happens', content: [] },
       { id: 'coping', sectionLabel: 'YOUR WORKAROUND', heading: 'What most designers do', content: [] },
@@ -493,144 +526,64 @@ export const scenarios = [
       { id: 'vedanta', sectionLabel: 'THE ROOT CAUSE', heading: 'The source of pain', content: [] },
     ]
   },
-  // ... repeat shape for scenarios 2, 3, 4
+  {
+    id: 'scenario-2',
+    slug: 'strategic-exclusion',
+    label: 'SITUATION',
+    scenarioTitle: 'Exclusion from Strategic Decisions',
+    title: "If I'm not invited, am I still at execution level?",
+    trigger: "You're doing the work but not in the room where it's shaped. You find out what was decided, not why.",
+    sections: [
+      { id: 'when', sectionLabel: 'RECOGNITION', heading: 'When this happens', content: [] },
+      { id: 'coping', sectionLabel: 'YOUR WORKAROUND', heading: 'What most designers do', content: [] },
+      { id: 'brain', sectionLabel: 'NEUROSCIENCE', heading: "What's happening in your brain", content: [] },
+      { id: 'vedanta', sectionLabel: 'THE ROOT CAUSE', heading: 'The source of pain', content: [] },
+    ]
+  },
+  {
+    id: 'scenario-3',
+    slug: 'authority-override',
+    label: 'SITUATION',
+    scenarioTitle: 'Authority Override',
+    title: "Does truth matter at all here?",
+    trigger: "You brought evidence. They brought hierarchy. The decision was already made before you spoke.",
+    sections: [
+      { id: 'when', sectionLabel: 'RECOGNITION', heading: 'When this happens', content: [] },
+      { id: 'coping', sectionLabel: 'YOUR WORKAROUND', heading: 'What most designers do', content: [] },
+      { id: 'brain', sectionLabel: 'NEUROSCIENCE', heading: "What's happening in your brain", content: [] },
+      { id: 'vedanta', sectionLabel: 'THE ROOT CAUSE', heading: 'The source of pain', content: [] },
+    ]
+  },
+  {
+    id: 'scenario-4',
+    slug: 'opaque-evaluation',
+    label: 'SITUATION',
+    scenarioTitle: 'Opaque Evaluation',
+    title: "Who will plan and track my progress, if not me?",
+    trigger: "You don't know what good looks like here. The goalposts move and nobody tells you where they are.",
+    sections: [
+      { id: 'when', sectionLabel: 'RECOGNITION', heading: 'When this happens', content: [] },
+      { id: 'coping', sectionLabel: 'YOUR WORKAROUND', heading: 'What most designers do', content: [] },
+      { id: 'brain', sectionLabel: 'NEUROSCIENCE', heading: "What's happening in your brain", content: [] },
+      { id: 'vedanta', sectionLabel: 'THE ROOT CAUSE', heading: 'The source of pain', content: [] },
+    ]
+  }
 ]
 ```
-
-**Field rendering map:**
-| Field | Renders in | Style |
-|---|---|---|
-| `slug` | URL: /scenario/:slug | — |
-| `label` | Not rendered — always "SITUATION", reserved for future use | — |
-| `scenarioTitle` | Scenario Detail header — title line + Scenario List card title | Lora SemiBold 24px, #F5EDE6 (header) / Lora Bold, #2E2724 (card) |
-| `title` | Scenario Detail header — subtitle line | Source Sans 3 Regular 14px, #F5EDE6 |
-| `trigger` | Scenario Detail header — body line AND Scenario List card description | Source Sans 3 Regular 14px, #F5EDE6 (header) / #4F433E (card) |
-| `sections[].sectionLabel` | Accordion header — label | Azeret Mono 10px, #077A98, uppercase |
-| `sections[].heading` | Accordion header — heading | Lora Medium 500, 20px, #2E2724 |
+```
 
 ### 8.2 Content Types
 
-**7 content types total. One shared component renders `subsection-label` regardless of context.**
-
----
-
-#### `paragraph`
-Plain body text.
-| Property | Value |
+| Type | Rendering |
 |---|---|
-| Font | Source Sans 3 Regular 16px |
-| Color | #2E2724 |
-| Line-height | 26px |
-
----
-
-#### `subsection-label`
-Standalone heading that introduces a group below it. Used for: "You might feel", "Other designers say", "Why this helps temporarily?", "Why this doesn't solve it?". Same rendering in all contexts — context does not change the component.
-| Property | Value |
-|---|---|
-| Font | Source Sans 3 SemiBold 16px |
-| Color | #2E2724 |
-| Line-height | 26px |
-
----
-
-#### `pill`
-Body feeling / emotional state. Hugs content — NOT full width. Flows inline with siblings.
-| Property | Value |
-|---|---|
-| Font | Source Sans 3 Regular 14px |
-| Color | #4F433E |
-| Border | 0.5px solid #E4AD86 |
-| Border-radius | 16px |
-| Padding | 4px 12px |
-| Layout | flex-wrap: wrap, gap: 14px 13px |
-| Text case | Title Case (e.g. "Heart racing" not "HEART RACING") |
-
----
-
-#### `quote`
-Designer quote from interview. Full width.
-| Property | Value |
-|---|---|
-| Font | Source Sans 3 Italic 14px |
-| Color | #4F433E |
-| Left border | 3px solid #077A98 |
-| Padding-left | 8px |
-
----
-
-#### `strategy`
-Coping strategy item. Two lines — action + thought. Appears only in the YOUR WORKAROUND section.
-| Property | Value |
-|---|---|
-| Icon | MdModeOfTravel, 16px, #2E2724 — left of action text, same row |
-| `action` text | Source Sans 3 Regular 16px, #2E2724 — what the designer does |
-| `thought` text | Source Sans 3 Italic 14px, #2E2724 — the internal belief, rendered directly below action |
-| Gap between icon and action | 4px |
-| Gap between action and thought | 0 (thought is flush below action) |
-| Icon not in data | Icon is fixed per component — NOT a data field |
-
-```js
-{ type: "strategy", action: "Vent to colleagues or friends", thought: "\"They're being unfair. Anyone would feel sidelined here.\"" }
-```
-
----
-
-#### `neuroscience-card`
-Self-contained neuroscience explanation block. Appears only in the NEUROSCIENCE section. Cards are separated by a divider.
-
-**Rendering order (top to bottom):**
-1. `title` — same styles as `subsection-label`: Source Sans 3 SemiBold 16px, #2E2724
-2. `introText` — Source Sans 3 Regular 14px, #2E2724
-3. Highlight block:
-   - Background: rgba(79, 67, 62, 0.1) — translucent warm tint
-   - Left border: 3px solid #077A98
-   - Padding: 8px
-   - Gap between label and body: 9px
-   - `highlightLabel` — Azeret Mono Regular 10px, #077A98, uppercase
-   - `highlightBody` — Source Sans 3 Regular 14px, #2E2724
-4. `trailingText` — Source Sans 3 Regular 14px, #2E2724, 4px gap below highlight block
-
-```js
-{
-  type: "neuroscience-card",
-  title: "Your brain reads exclusion as danger",
-  introText: "When you're excluded from decisions or your expertise is dismissed, your brain doesn't distinguish between social rejection and physical threat.",
-  highlightLabel: "SOCIAL PAIN = PHYSICAL PAIN",
-  highlightBody: "The same pain circuits that fire when you're physically hurt light up when you're professionally dismissed.",
-  trailingText: "Social pain is physical pain to your nervous system."
-}
-```
-
----
-
-#### `vedanta-card`
-Self-contained Vedantic explanation block. Appears only in THE ROOT CAUSE section. Cards are separated by a divider.
-
-**Rendering order (top to bottom):**
-1. `title` — Azeret Mono Regular 10px, #077A98, uppercase (renders as a label — same visual as sectionLabel)
-2. `insightText` — Source Sans 3 Italic 14px, #4F433E (short condensed insight, max 5 words)
-3. `body` — Source Sans 3 Regular 14px, #2E2724
-
-```js
-{
-  type: "vedanta-card",
-  title: "The shift you didn't notice",
-  insightText: "I am this skill.",
-  body: "You worked hard and built real expertise. Then you stopped saying \"I have this skill\" and started saying \"I am this skill.\""
-}
-```
-
----
-
-#### Divider between cards
-A thin horizontal line separating neuroscience-cards and vedanta-cards from each other.
-| Property | Value |
-|---|---|
-| Color | #E4AD86 (--border-chips) |
-| Width | ~50% of container, centered |
-| Height | 1px |
-| Margin | 12px top and bottom |
+| paragraph | Plain body text — Source Sans 3 Regular 16px, #2E2724, left-aligned |
+| subsection-label | Standalone heading — Source Sans 3 SemiBold 16px, #2E2724. Used for: "You might feel", "Other designers say", "Why this helps temporarily?", "Why this doesn't solve it?" |
+| quote | Designer quote — left border 3px solid #077A98, Source Sans 3 Italic 16px, #4F433E, padding-left 8px |
+| pill | Body feeling — hugs content, NOT full width, flex-wrap: wrap, gap: 8px. Border 1px solid #E4AD86, border-radius 16px,  padding 8px 4px, Source Sans 3 Regular 14px, #4F433E. NO text-transform: uppercase — render Title Case exactly as written in data |
+| strategy | Left border + two lines Left border 2px solid #E4AD86. Action text: Source Sans 3 Regular 16px, #2E2724. Thought text: Source Sans 3 Italic 14px, #2E2724, directly below. No icon. |
+| neuroscience-card | Composite block — title (Source Sans 3 SemiBold 16px, #2E2724) → introText (Source Sans 3 Regular 14px, #2E2724) → highlight block (background rgba(79,67,62,0.15), left border 3px solid #077A98, padding 8px: highlightLabel Azeret Mono 10px #077A98 uppercase, highlightBody Source Sans 3 Regular 14px #2E2724) → trailingText (Source Sans 3 Regular 14px, #2E2724, 4px gap below highlight). Cards separated by divider. |
+| vedanta-card | Composite block — title (Azeret Mono 10px, #077A98, uppercase, letter-spacing 1.5px — renders as label NOT heading) → insightText (Lora Italic 20px, line-height 28px, letter-spacing 0, #4F433E) → body (Source Sans 3 Regular 16px, #2E2724). Cards separated by divider. |
+| divider | Between neuroscience-cards and vedanta-cards — #E4AD86, ~50% width centered, 1px height, margin 12px top and bottom |
 
 ### 8.3 i18n String Keys
 All UI strings (not scenario content) are in the translation files. For MVP, en.json and fr.json are identical.
@@ -700,7 +653,7 @@ All UI strings (not scenario content) are in the translation files. For MVP, en.
   - `light` → `var(--text-light)`
   - `teal` → `var(--accent)`
 - Removed dark-mode `:root` block (no dark mode in this app)
-- Added Google Fonts to `index.html`: Lora (700, 600, 500), Source Sans 3 (400, 600), Azeret Mono (400, 500)
+- Added Google Fonts to `index.html`: Lora (700), Source Sans 3 (400), Azeret Mono (400, 500)
 
 **Verified `:root` tokens (Figma-confirmed):**
 ```css
@@ -709,17 +662,11 @@ All UI strings (not scenario content) are in the translation files. For MVP, en.
   --surface-light: #F5EDE6;
   --border-chips: #E4AD86;
   --text-primary: #2E2724;
-  --text-secondary: #4F433E;
-  --text-light: #F5EDE6;
+  --text-secondary: #4F433E;  /* verified against Figma — not #4F443E */
+  --text-light: #F6E9CD;
   --accent: #077A98;
 }
 ```
-
-**ACTION REQUIRED — scenarios.js:**
-The scaffold created `src/data/scenarios.js` as an empty array. Replace it entirely with the final `scenarios.js` content file before starting Module 4. The file contains all 4 scenarios with complete content. Data shape per scenario:
-- `id`, `slug`, `label`, `scenarioTitle`, `title`, `trigger`
-- `sections[]` → each has `id`, `sectionLabel`, `heading`, `content[]`
-- `content[]` → 7 types: `paragraph`, `subsection-label`, `pill`, `quote`, `strategy`, `neuroscience-card`, `vedanta-card`
 
 ---
 
@@ -727,7 +674,7 @@ The scaffold created `src/data/scenarios.js` as an empty array. Replace it entir
 
 **What was built:**
 - `src/screens/EntryScreen.jsx` — Entry Screen component
-- `src/components/Chip.jsx` — Chip component with decorative number (Lora Bold 32px, 30% opacity, top-aligned) and text (Source Sans 3 16px)
+- `src/components/Chip.jsx` — Chip component with decorative number (Lora Bold 32px, 30% opacity, top-aligned) and text (Source Sans 3 16px) - numbers are gone, thumbnails replaced them
 - `src/components/LanguageToggle.jsx` — reusable toggle with `variant="dark"|"light"` prop, active dot indicator, 44×44px tap targets, URL param persistence
 - Chip tap → navigates to correct scenario or follow-up screen per mapping in Section 6.1
 - Language toggle reads `?lang=` URL param on mount (in `src/main.jsx`)
@@ -745,15 +692,11 @@ The scaffold created `src/data/scenarios.js` as an empty array. Replace it entir
 
 Build `src/screens/FollowupScreen.jsx`. Full screen spec in Section 7 Screen 6.
 
-- Dark header band (#2E2724) — no SITUATION label on this screen
-- Header title: "I was excluded from strategic meetings" — Lora SemiBold 24px, #F5EDE6, letter-spacing -0.3px — wired from i18n `followup.title`
-- Header subtitle: "Which sounds closer?" — Source Sans 3 Regular 14px, #F5EDE6 — wired from i18n `followup.subtitle`
-- Back arrow: MdArrowBack, #F5EDE6, top-left, 44×44px tap target → navigates to Entry Screen (/)
-- Language toggle: dark variant (#F5EDE6 text), top-right, same row as back arrow
-- Two chips WITH decorative numbers 01 and 02 — reuse Chip component from Module 2
-- Option A text: wired from i18n `followup.option_a` → navigates to /scenario/expertise-bypass
-- Option B text: wired from i18n `followup.option_b` → navigates to /scenario/strategic-exclusion
-- Page background: #DDCFC5
+- Two chips WITH decorative numbers 01 and 02 — reuse Chip component - no decorative numbers, thumbnail replaced them
+- Option A → /scenario/expertise-bypass
+- Option B → /scenario/strategic-exclusion
+- Back arrow → Entry Screen (/)
+- Wire i18n strings from `followup` keys
 
 ---
 
@@ -761,41 +704,11 @@ Build `src/screens/FollowupScreen.jsx`. Full screen spec in Section 7 Screen 6.
 
 Build `src/screens/ScenarioDetail.jsx`. Full screen spec in Section 7 Screen 2 & 3.
 
-#### 4.1 Screen structure
-- Read scenario `slug` from URL params, match against scenarios array in scenarios.js
-- Render `scenarioTitle` as header title — Lora SemiBold 24px, #F5EDE6
-- Render `title` as header subtitle — Source Sans 3 Regular 14px, #F5EDE6
+- Read scenario slug from URL params, match against scenarios.js
 - 4 accordion sections, all collapsed by default, only one open at a time
 - Back arrow: if user arrived via /followup → back to /followup. If arrived directly via chip → back to Entry Screen (/). Use React Router location state to track origin.
-
-#### 4.2 Accordion section header
-Each section renders two text elements:
-- `sectionLabel` — Azeret Mono 10px, #077A98, uppercase
-- `heading` — Lora Medium 500, 20px, #2E2724
-- Expand icon: MdExpandMore (collapsed) / MdExpandLess (open) — right aligned, #2E2724
-- Border-bottom: 1px solid #077A98 (accent) — both collapsed and open states
-- Border-radius: first section top corners 4px, last section bottom corners 4px, middle sections 0
-
-#### 4.3 Content renderer
-Build a `ContentRenderer` component that maps each content item's `type` field to the correct component. **Exactly 7 types — no others.**
-
-**CRITICAL: There is no `card-header` type. Use `subsection-label` instead.**
-
-| Type | Component | Notes |
-|---|---|---|
-| `paragraph` | `<p>` | Source Sans 3 Regular 16px, #2E2724, line-height 26px |
-| `subsection-label` | `<p>` bold | Source Sans 3 SemiBold 16px, #2E2724. Used for: "You might feel", "Other designers say", "Why this helps temporarily?", "Why this doesn't solve it?" |
-| `pill` | Inline pill | Border 0.5px solid #E4AD86, border-radius 16px, padding 4px 12px, Source Sans 3 Regular 14px, #4F433E. flex-wrap: wrap, gap: 14px 13px. **NO text-transform: uppercase** — render text exactly as written in data (Title Case) |
-| `quote` | Left-border block | Source Sans 3 Italic 14px, #4F433E, left border 3px solid #077A98, padding-left 8px |
-| `strategy` | Icon + two lines | MdModeOfTravel 16px #2E2724 + action text (Source Sans 3 Regular 16px, #2E2724) on same row. Thought text (Source Sans 3 Italic 14px, #2E2724) directly below. Icon is hardcoded in component — NOT from data |
-| `neuroscience-card` | Composite block | See Section 8.2 for exact rendering order: title → introText → highlight block → trailingText. Separated from next card by divider |
-| `vedanta-card` | Composite block | See Section 8.2 for exact rendering order: title (Azeret Mono 10px, #077A98, uppercase) → insightText (Source Sans 3 Italic 14px, #4F433E) → body (Source Sans 3 Regular 14px, #2E2724). Separated from next card by divider |
-
-#### 4.4 Divider between cards
-Between each `neuroscience-card` and between each `vedanta-card`:
-- Color: #E4AD86
-- Width: ~50% of container, centered
-- Height: 1px, margin 12px top and bottom
+- Wire scenario data from scenarios.js
+- Wire i18n strings for UI labels
 
 ---
 
@@ -803,10 +716,7 @@ Between each `neuroscience-card` and between each `vedanta-card`:
 
 Build `src/screens/ScenarioList.jsx`. Full screen spec in Section 7 Screen 4.
 
-- 4 scenario cards, one per scenario from scenarios.js
-- Card title: `scenarioTitle` field — Lora Bold, #2E2724
-- Card description: `trigger` field — Source Sans 3 Regular 14px, #4F433E
-- Tap full card → navigate to /scenario/:slug
+- 4 scenario cards, tap card → corresponding Scenario Detail
 - Back arrow → previous Scenario Detail
 - Wire i18n strings from `scenarios` keys
 
@@ -816,36 +726,17 @@ Build `src/screens/ScenarioList.jsx`. Full screen spec in Section 7 Screen 4.
 
 Build `src/screens/ExitFlow.jsx`. Full screen spec in Section 7 Screen 5.
 
-- Light header (#DDCFC5), sticky — position: sticky, top: 0
-- Back arrow: MdArrowBack, #2E2724, 44×44px tap target → navigates back to Scenario Detail
-- Language toggle: light variant (#2E2724 text), top-right, same row as back arrow
-- Acknowledgment text: wired from i18n `exit.acknowledgment` — Lora Bold, large display size, #2E2724, left-aligned, 16px margin
-- Horizontal divider: #E4AD86, between acknowledgment text and investigate further link
-- Investigate further link:
-  - Book/document icon, #077A98
-  - Text: wired from i18n `exit.investigate`
-  - Arrow → after text
-  - Source Sans 3, #077A98, underlined
-  - **Active and tappable for MVP** — links to external Acharya Prashant resources
-  - NOT greyed out — Figma shows active teal link
-- Page background: #DDCFC5
+- Back arrow → Scenario Detail
+- Wire i18n strings from `exit` keys
 
 ---
 
 ### Module 7 — Routing & Navigation
 
-- Install React Router if not already installed
-- Routes: `/`, `/scenario/:slug`, `/scenarios`, `/exit`, `/followup`
-- Valid slugs: `expertise-bypass`, `strategic-exclusion`, `authority-override`, `opaque-evaluation`
-- Invalid slug → redirect to Entry Screen (/)
-- Pass `?lang=` URL param through ALL route transitions — never drop it on navigation
-- Use React Router `location.state` to track navigation origin for back arrow behaviour
-- Back arrow behaviour per Section 5.3 exactly:
-  - Scenario Detail reached via chip → back to /
-  - Scenario Detail reached via /followup → back to /followup
-  - Scenario List → back to previous Scenario Detail
-  - Exit Flow → back to Scenario Detail
-  - Follow-up Question → back to /
+- Routes: /, /scenario/:slug, /scenarios, /exit, /followup
+- Valid slugs: expertise-bypass, strategic-exclusion, authority-override, opaque-evaluation
+- Pass lang URL param through all route transitions
+- Back arrow behaviour per Section 5.3 exactly
 - PWA home screen launch opens Entry Screen (/)
 
 ---
@@ -854,34 +745,45 @@ Build `src/screens/ExitFlow.jsx`. Full screen spec in Section 7 Screen 5.
 
 #### 8.1 Visual QA
 - Test all screens at 390px viewport width
-- Verify #F5EDE6 = tappable / #DDCFC5 = not tappable — no exceptions across all screens
+- Verify #F5EDE6 = tappable / #DDCFC5 = not tappable — no exceptions
 - Verify accordion collapsed headers all use #F5EDE6 background
 - Verify accordion body (open) uses #DDCFC5 background
-- Verify all tap targets minimum 44×44px (chips, accordion headers, back arrows, language toggle buttons, cards)
-- Fix language toggle gap if visual overlap persists (currently 24px, Figma specifies 8px)
+- Verify all tap targets minimum 44×44px
+- Verify Global Navigation Bar appears on all screens except Entry Screen
+- Verify Global Navigation Bar background is #2E2724 at 80% opacity
+- Verify Entry Screen header uses gradient: linear-gradient(to right, #2E2724 0%, #7B4B29 100%)
+- Verify Scenario Detail illustration zone is 449px height, full width
+- Verify gradient overlay renders correctly over illustration bottom portion
+- Verify chip thumbnails render at 54×54px with 16px border-radius
+- Verify Scenario List cards have 100px image band at top
+- Verify Exit Flow full-screen illustration renders correctly
 - WCAG AA contrast check on all text/background combinations
 
-#### 8.2 Content renderer QA
-- Verify all 7 content types render correctly in Scenario Detail
-- Pills: confirm NO text-transform: uppercase — text must display in Title Case exactly as in data
-- Pills: confirm flex-wrap with gap, NOT full-width
-- Quotes: confirm left border 3px solid #077A98, italic, 14px — NOT 16px
-- Strategy items: confirm MdModeOfTravel icon renders at 16px, action + thought on separate lines
-- Neuroscience cards: confirm highlight block background is rgba(79,67,62,0.1) with left border #077A98
-- Vedanta cards: confirm title renders as Azeret Mono 10px #077A98 uppercase label — NOT as a heading
-- Confirm dividers appear between cards (neuroscience and vedanta sections)
-- subsection-label: confirm Source Sans 3 SemiBold 16px — NOT Azeret Mono
+#### 8.2 Content Renderer QA
+- Verify all 7 content types render: paragraph, subsection-label, pill, quote, strategy, neuroscience-card, vedanta-card
+- Pills: NO text-transform: uppercase — Title Case only
+- Pills: flex-wrap, NOT full-width
+- Quotes: left border 3px solid #077A98, italic, 14px
+- Strategy: left border 2px solid #E4AD86, action + thought on separate lines, NO icon
+- Neuroscience cards: highlight block background is rgba(79,67,62,0.15) with left border #077A98
+- Vedanta cards: title renders as Azeret Mono 10px #077A98 uppercase label — NOT a heading
+- Vedanta cards: body text renders at 16px not 14px
+- Dividers appear between cards in neuroscience and vedanta sections
+- subsection-label: Source Sans 3 SemiBold 16px — NOT Azeret Mono
 
-#### 8.3 Data field QA
-- Scenario Detail header: `scenarioTitle` renders as Lora SemiBold 24px title
-- Scenario Detail header: `title` renders as Source Sans 3 Regular 14px subtitle
+#### 8.3 Data Field QA
+- Scenario Detail illustration: correct file loads per slug from public/illustrations/[slug].png
+- Scenario Detail header: `scenarioTitle` renders as Lora SemiBold 24px
+- Scenario Detail header: `title` renders as Source Sans 3 Regular 16px subtitle
 - Scenario List cards: `scenarioTitle` as card title, `trigger` as card description
-- Accordion headers: `sectionLabel` as Azeret Mono 10px label, `heading` as Lora Medium 500 20px
+- Scenario List cards: correct image file loads per slug from public/illustrations/[slug]-card.png
+- Chip thumbnails: correct file loads per slug from public/thumbnails/
 
 #### 8.4 Navigation QA
-- Verify lang URL param persists across all screen transitions
-- Verify back arrow behaviour matches Section 5.3 exactly for all entry paths
-- Verify Chip 03 → Follow-up screen → correct scenario routing
+- lang URL param persists across all screen transitions
+- Back arrow behaviour matches Section 5.3 exactly for all entry paths
+- Home icon in nav bar always navigates to Entry Screen (/)
+- Chip 03 → Follow-up screen → correct scenario routing
 
 #### 8.5 PWA QA
 - Test Add to Home Screen on iOS Safari
@@ -899,7 +801,6 @@ Build `src/screens/ExitFlow.jsx`. Full screen spec in Section 7 Screen 5.
 - Analytics or any tracking
 - Back-office or content management system
 - RAG or AI-generated content
-- Illustrations or images of any kind
 - Reading time estimates
 
 ---
@@ -917,5 +818,5 @@ Build `src/screens/ExitFlow.jsx`. Full screen spec in Section 7 Screen 5.
 | Tappable rule | #F5EDE6 = tappable, #DDCFC5 = not tappable — no exceptions |
 | No form elements | No HTML form tags — use onClick handlers only |
 | Mobile-first | All screens designed and tested at 390px width first |
-| No chrome | No persistent bottom nav, no sidebar, no hamburger menu |
+| Nav bar | Global nav bar (Section 5.5) on all screens except Entry Screen — no other persistent chrome |
 | Figma authority | Where PRD and Figma conflict, Figma wins |

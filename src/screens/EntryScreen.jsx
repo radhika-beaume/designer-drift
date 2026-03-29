@@ -19,33 +19,38 @@ export default function EntryScreen() {
   const chips = [
     {
       key: '01',
-      number: '01',
       labelKey: 'chips.01',
+      thumbnailSrc: '/thumbnails/expertise-bypass-thumb.png',
       to: '/scenario/expertise-bypass',
     },
     {
       key: '02',
-      number: '02',
       labelKey: 'chips.02',
+      thumbnailSrc: '/thumbnails/authority-override-thumb.png',
       to: '/scenario/authority-override',
     },
-    { key: '03', number: '03', labelKey: 'chips.03', to: '/followup' },
+    {
+      key: '03',
+      labelKey: 'chips.03',
+      thumbnailSrc: '/thumbnails/mixedthumbnail.png',
+      to: '/followup',
+    },
     {
       key: '04',
-      number: '04',
       labelKey: 'chips.04',
+      thumbnailSrc: '/thumbnails/strategic-exclusion-thumb.png',
       to: '/scenario/strategic-exclusion',
     },
     {
       key: '05',
-      number: '05',
       labelKey: 'chips.05',
+      thumbnailSrc: '/thumbnails/authority-override-thumb.png',
       to: '/scenario/authority-override',
     },
     {
       key: '06',
-      number: '06',
       labelKey: 'chips.06',
+      thumbnailSrc: '/thumbnails/opaque-evaluation-thumb.png',
       to: '/scenario/opaque-evaluation',
     },
   ]
@@ -75,7 +80,7 @@ export default function EntryScreen() {
   return (
     <div className="flex min-h-screen flex-col" style={{ backgroundColor: 'var(--background)' }}>
       <header
-        style={{ backgroundColor: 'var(--text-primary)', width: '100%', overflow: 'hidden' }}
+        style={{ background: 'linear-gradient(to right, #2E2724 0%, #7B4B29 100%)', width: '100%', overflow: 'hidden' }}
       >
         <div className="mx-auto w-full max-w-md">
           <div
@@ -133,7 +138,7 @@ export default function EntryScreen() {
         {chips.map((chip) => (
           <motion.div key={chip.key} variants={chipVariants}>
             <Chip
-              number={chip.number}
+              thumbnailSrc={chip.thumbnailSrc}
               label={t(chip.labelKey)}
               onClick={() => {
                 const isScenario = typeof chip.to === 'string' && chip.to.startsWith('/scenario/')

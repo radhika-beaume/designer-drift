@@ -2,8 +2,9 @@ import { useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { reducedMotion, spring, duration } from '../motion.js'
 
-export default function Chip({ number, label, onClick }) {
+export default function Chip({ number, thumbnailSrc, label, onClick }) {
   const showNumber = number !== undefined && number !== null && number !== ''
+  const showThumbnail = typeof thumbnailSrc === 'string' && thumbnailSrc.length > 0
   const containerRef = useRef(null)
   const [ripples, setRipples] = useState([])
 
@@ -67,8 +68,23 @@ export default function Chip({ number, label, onClick }) {
         </AnimatePresence>
       </div>
 
-      <div className={`flex items-start ${showNumber ? 'gap-3' : 'gap-0'}`}>
-        {showNumber ? (
+      <div className={`flex items-center ${(showThumbnail || showNumber) ? 'gap-3' : 'gap-0'}`}>
+        {showThumbnail ? (
+          <img
+            src={thumbnailSrc}
+            alt=""
+            width={54}
+            height={54}
+            style={{
+              width: '54px',
+              height: '54px',
+              borderRadius: '16px',
+              objectFit: 'cover',
+              flexShrink: 0,
+              display: 'block',
+            }}
+          />
+        ) : showNumber ? (
           <div className="font-['Lora'] text-[32px] font-bold leading-none text-secondary opacity-30">
             {number}
           </div>

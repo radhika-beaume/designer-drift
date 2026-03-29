@@ -1,10 +1,7 @@
-import { MdArrowBack, MdMenuBook } from 'react-icons/md'
-import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
-import LanguageToggle from '../components/LanguageToggle.jsx'
+import GlobalNavBar from '../components/GlobalNavBar.jsx'
 import MotionLink from '../components/MotionLink.jsx'
-import { duration } from '../motion.js'
 
 const INVESTIGATE_URL = 'https://acharyaprashant.org'
 
@@ -22,91 +19,89 @@ export default function ExitFlow() {
   const backTo = location.state?.fromScenarioPath || -1
 
   return (
-    <div className="flex min-h-screen flex-col" style={{ backgroundColor: 'var(--background)' }}>
-      <header
+    <div className="flex min-h-screen flex-col" style={{ position: 'relative', overflow: 'hidden', minHeight: '100vh' }}>
+      <img
+        src="/illustrations/exit-flow.png"
+        alt=""
+        aria-hidden="true"
         style={{
-          backgroundColor: 'var(--background)',
-          position: 'sticky',
-          top: 0,
-          zIndex: 10,
           width: '100%',
+          height: '100vh',
+          objectFit: 'cover',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          pointerEvents: 'none',
         }}
-      >
-        <div className="mx-auto w-full max-w-md" style={{ padding: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <motion.div whileTap={{ scale: 0.97 }} transition={{ duration: duration(100) }}>
-              <button
-                type="button"
-                onClick={() => navigate(typeof backTo === 'string' ? withLang(backTo) : backTo)}
-                aria-label={t('nav.back', { defaultValue: 'Back' })}
-                style={{
-                  width: '44px',
-                  height: '44px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'var(--text-primary)',
-                }}
-              >
-                <MdArrowBack size={22} />
-              </button>
-            </motion.div>
+      />
 
-            <LanguageToggle variant="light" />
-          </div>
-        </div>
+      <header style={{ position: 'relative', zIndex: 2, width: '100%', height: '44px' }}>
+        <GlobalNavBar backTo={backTo} />
       </header>
 
-      <main className="mx-auto w-full max-w-md" style={{ padding: '0 16px 24px 16px' }}>
+      <main
+        className="mx-auto w-full max-w-md"
+        style={{ position: 'relative', zIndex: 1, flex: 1, padding: '54px 16px 96px 16px' }}
+      >
         <h1
           style={{
-            fontFamily: 'Lora',
-            fontWeight: 700,
-            fontSize: '28px',
-            lineHeight: '36px',
-            letterSpacing: '-0.3px',
+            position: 'absolute',
+            top: '134px',
+            left: '16px',
+            width: '358px',
+            fontFamily: "'Lora', serif",
+            fontWeight: 500,
+            fontSize: '32px',
+            lineHeight: '40px',
+            letterSpacing: '-0.5px',
+            fontStyle: 'italic',
             color: 'var(--text-primary)',
             textAlign: 'left',
-            margin: '12px 0 0 0',
+            margin: 0,
           }}
         >
           {t('exit.acknowledgment')}
         </h1>
-
-        <div
-          style={{
-            width: '40%',
-            height: '1px',
-            backgroundColor: '#E4AD86',
-            margin: '16px 0',
-          }}
-        />
-
-        <MotionLink>
-          <a
-            href={INVESTIGATE_URL}
-            target="_blank"
-            rel="noreferrer"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              fontFamily: 'Source Sans 3',
-              fontWeight: 600,
-              fontSize: '14px',
-              lineHeight: '22px',
-              color: 'var(--accent)',
-              textAlign: 'left',
-              textDecoration: 'underline',
-            }}
-          >
-            <MdMenuBook size={16} color={'#077A98'} />
-            <span>
-              {t('exit.investigate')} {'\u2192'}
-            </span>
-          </a>
-        </MotionLink>
       </main>
+
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 2,
+          padding: '0 16px 16px 16px',
+        }}
+      >
+        <div className="mx-auto w-full max-w-md">
+          <MotionLink style={{ width: '100%' }}>
+            <a
+              href={INVESTIGATE_URL}
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'var(--surface-light)',
+                padding: '16px',
+                borderRadius: '8px',
+                borderBottom: '1px solid var(--border-chips)',
+                fontFamily: 'Source Sans 3',
+                fontWeight: 600,
+                fontSize: '14px',
+                lineHeight: '22px',
+                color: 'var(--accent)',
+                textDecoration: 'none',
+              }}
+            >
+              {t('exit.investigate')} {'\u2192'}
+            </a>
+          </MotionLink>
+        </div>
+      </div>
     </div>
   )
 }

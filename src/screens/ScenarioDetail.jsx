@@ -1,9 +1,9 @@
 import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { MdArrowBack, MdArrowForward, MdExpandLess, MdExpandMore, MdModeOfTravel } from 'react-icons/md'
+import { MdArrowForward, MdExpandLess, MdExpandMore } from 'react-icons/md'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
-import LanguageToggle from '../components/LanguageToggle.jsx'
+import GlobalNavBar from '../components/GlobalNavBar.jsx'
 import MotionLink from '../components/MotionLink.jsx'
 import { scenarios } from '../data/scenarios.js'
 import { easeIn, easeOut, reducedMotion, spring, duration } from '../motion.js'
@@ -47,6 +47,26 @@ function renderBlocks(blocks) {
     flushPills()
 
     const currentType = block?.type || null
+
+    const isWhySubsectionLabel =
+      currentType === 'subsection-label' &&
+      typeof block?.text === 'string' &&
+      block.text.trim().toLowerCase().startsWith('why ')
+
+    if (isWhySubsectionLabel && previousNonPillType) {
+      rendered.push(
+        <div
+          key={`subsection-divider-${idx}-${rendered.length}`}
+          style={{
+            width: '50%',
+            height: '1px',
+            backgroundColor: '#E4AD86',
+            margin: '16px auto',
+          }}
+        />
+      )
+    }
+
     const isNeuroPair = previousNonPillType === 'neuroscience-card' && currentType === 'neuroscience-card'
     const isVedantaPair = previousNonPillType === 'vedanta-card' && currentType === 'vedanta-card'
     if (isNeuroPair || isVedantaPair) {
@@ -54,10 +74,10 @@ function renderBlocks(blocks) {
         <div
           key={`card-divider-${idx}-${rendered.length}`}
           style={{
-            width: '40%',
+            width: '50%',
             height: '1px',
             backgroundColor: '#E4AD86',
-            margin: '16px auto',
+            margin: '12px auto',
           }}
         />
       )
@@ -92,61 +112,20 @@ function ContentBlock({ block }) {
     )
   }
 
-  if (block.type === 'divider') {
-    return (
-      <div
-        style={{
-          width: '40%',
-          height: '1px',
-          backgroundColor: 'var(--border-chips)',
-          margin: '12px auto',
-        }}
-      />
-    )
-  }
-
-  if (block.type === 'card-header') {
+  if (block.type === 'subsection-label') {
     return (
       <div
         style={{
           fontFamily: 'Source Sans 3',
           fontWeight: 600,
           fontSize: '16px',
-          lineHeight: '24px',
+          lineHeight: '26px',
           color: 'var(--text-primary)',
           textAlign: 'left',
           margin: 0,
         }}
       >
         {block.text}
-      </div>
-    )
-  }
-
-  if (block.type === 'subsection-label') {
-    return (
-      <div>
-        <div
-          style={{
-            width: '40%',
-            height: '1px',
-            backgroundColor: '#E4AD86',
-            margin: '16px auto',
-          }}
-        />
-        <div
-          style={{
-            fontFamily: 'Source Sans 3',
-            fontWeight: 600,
-            fontSize: '16px',
-            lineHeight: '26px',
-            color: 'var(--text-primary)',
-            textAlign: 'left',
-            margin: 0,
-          }}
-        >
-          {block.text}
-        </div>
       </div>
     )
   }
@@ -162,7 +141,7 @@ function ContentBlock({ block }) {
       <div
         style={{
           borderLeft: '3px solid var(--accent)',
-          paddingLeft: '12px',
+          paddingLeft: '8px',
           width: 'auto',
           maxWidth: 'none',
           minWidth: 0,
@@ -172,10 +151,10 @@ function ContentBlock({ block }) {
           style={{
             fontFamily: 'Source Sans 3',
             fontWeight: 400,
-            fontSize: '14px',
-            lineHeight: '22px',
+            fontSize: '16px',
+            lineHeight: '26px',
             fontStyle: 'italic',
-            color: 'var(--text-primary)',
+            color: 'var(--text-secondary)',
             textAlign: 'left',
             margin: 0,
             overflowWrap: 'break-word',
@@ -202,7 +181,7 @@ function ContentBlock({ block }) {
           display: 'inline-block',
           border: '1px solid var(--border-chips)',
           borderRadius: '16px',
-          padding: '6px 12px',
+          padding: '8px 4px',
           fontFamily: 'Source Sans 3',
           fontWeight: 400,
           fontSize: '14px',
@@ -218,24 +197,21 @@ function ContentBlock({ block }) {
 
   if (block.type === 'strategy') {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '4px', flexWrap: 'nowrap' }}>
-          <span style={{ width: '16px', height: '16px', flexShrink: 0, display: 'inline-flex' }}>
-            <MdModeOfTravel size={16} color={'#2E2724'} />
-          </span>
-          <div
-            style={{
-              fontFamily: 'Source Sans 3',
-              fontWeight: 400,
-              fontSize: '16px',
-              lineHeight: '26px',
-              color: '#2E2724',
-              textAlign: 'left',
-              margin: 0,
-            }}
-          >
-            {block.action}
-          </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+        <div
+          style={{
+            borderLeft: '3px solid var(--border-chips)',
+            paddingLeft: '8px',
+            fontFamily: 'Source Sans 3',
+            fontWeight: 400,
+            fontSize: '16px',
+            lineHeight: '26px',
+            color: 'var(--text-primary)',
+            textAlign: 'left',
+            margin: 0,
+          }}
+        >
+          {block.action}
         </div>
         <div
           style={{
@@ -244,7 +220,8 @@ function ContentBlock({ block }) {
             fontSize: '14px',
             lineHeight: '22px',
             fontStyle: 'italic',
-            color: '#2E2724',
+            color: 'var(--text-primary)',
+            paddingLeft: '4px',
             textAlign: 'left',
             margin: 0,
           }}
@@ -264,7 +241,7 @@ function ContentBlock({ block }) {
             fontWeight: 600,
             fontSize: '16px',
             lineHeight: '26px',
-            color: '#2E2724',
+            color: 'var(--text-primary)',
             textAlign: 'left',
             margin: 0,
           }}
@@ -276,9 +253,9 @@ function ContentBlock({ block }) {
           style={{
             fontFamily: 'Source Sans 3',
             fontWeight: 400,
-            fontSize: '16px',
-            lineHeight: '26px',
-            color: '#2E2724',
+            fontSize: '14px',
+            lineHeight: '22px',
+            color: 'var(--text-primary)',
             textAlign: 'left',
             margin: 0,
           }}
@@ -288,18 +265,18 @@ function ContentBlock({ block }) {
 
         <div
           style={{
-            backgroundColor: 'rgba(79, 67, 62, 0.1)',
+            backgroundColor: 'rgba(79,67,62,0.15)',
             borderLeft: '3px solid #077A98',
             padding: '8px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '9px',
+            gap: '8px',
           }}
         >
           <div
             style={{
               fontFamily: 'Azeret Mono',
-              fontWeight: 400,
+              fontWeight: 500,
               fontSize: '10px',
               letterSpacing: '1.5px',
               textTransform: 'uppercase',
@@ -315,8 +292,8 @@ function ContentBlock({ block }) {
               fontFamily: 'Source Sans 3',
               fontWeight: 400,
               fontSize: '14px',
-              lineHeight: '26px',
-              color: '#2E2724',
+              lineHeight: '22px',
+              color: 'var(--text-primary)',
               textAlign: 'left',
               margin: 0,
             }}
@@ -329,9 +306,9 @@ function ContentBlock({ block }) {
           style={{
             fontFamily: 'Source Sans 3',
             fontWeight: 400,
-            fontSize: '16px',
-            lineHeight: '26px',
-            color: '#2E2724',
+            fontSize: '14px',
+            lineHeight: '22px',
+            color: 'var(--text-primary)',
             textAlign: 'left',
             margin: '4px 0 0 0',
           }}
@@ -362,11 +339,12 @@ function ContentBlock({ block }) {
 
         <div
           style={{
-            fontFamily: 'Source Sans 3',
+            fontFamily: 'Lora',
             fontWeight: 400,
-            fontSize: '14px',
-            lineHeight: '22px',
+            fontSize: '20px',
+            lineHeight: '28px',
             fontStyle: 'italic',
+            letterSpacing: 0,
             color: '#4F433E',
             textAlign: 'left',
             margin: 0,
@@ -418,15 +396,15 @@ function AccordionItem({ label, heading, isOpen, onToggle, position, children })
   }
 
   const headerRadii = {
-    borderTopLeftRadius: isFirst ? '8px' : 0,
-    borderTopRightRadius: isFirst ? '8px' : 0,
-    borderBottomLeftRadius: isLast && !isOpen ? '8px' : 0,
-    borderBottomRightRadius: isLast && !isOpen ? '8px' : 0,
+    borderTopLeftRadius: isFirst ? '4px' : 0,
+    borderTopRightRadius: isFirst ? '4px' : 0,
+    borderBottomLeftRadius: isLast && !isOpen ? '4px' : 0,
+    borderBottomRightRadius: isLast && !isOpen ? '4px' : 0,
   }
 
   const bodyRadii = {
-    borderBottomLeftRadius: isLast ? '8px' : 0,
-    borderBottomRightRadius: isLast ? '8px' : 0,
+    borderBottomLeftRadius: isLast ? '4px' : 0,
+    borderBottomRightRadius: isLast ? '4px' : 0,
   }
 
   return (
@@ -442,7 +420,7 @@ function AccordionItem({ label, heading, isOpen, onToggle, position, children })
           border: 'none',
           borderBottom: '1px solid var(--accent)',
           ...headerRadii,
-          padding: '12px 16px',
+          padding: '8px',
           textAlign: 'left',
           display: 'flex',
           alignItems: 'center',
@@ -529,7 +507,7 @@ function AccordionItem({ label, heading, isOpen, onToggle, position, children })
                 }
           }
         >
-          <MdExpandMore size={22} />
+          {isOpen ? <MdExpandLess size={22} /> : <MdExpandMore size={22} />}
         </motion.span>
       </motion.button>
 
@@ -569,7 +547,19 @@ function AccordionItem({ label, heading, isOpen, onToggle, position, children })
               overflow: 'hidden',
             }}
           >
-            <div style={{ padding: '12px', textAlign: 'left' }}>{children}</div>
+            <div
+              className="scenario-detail-accordion-scroll"
+              style={{
+                padding: '12px',
+                textAlign: 'left',
+                maxHeight: '40vh',
+                overflowY: 'auto',
+                WebkitOverflowScrolling: 'touch',
+                overscrollBehavior: 'contain',
+              }}
+            >
+              {children}
+            </div>
           </motion.div>
         ) : null}
       </AnimatePresence>
@@ -638,33 +628,38 @@ export default function ScenarioDetail() {
 
   return (
     <div className="flex min-h-screen flex-col" style={{ backgroundColor: 'var(--background)' }}>
-      <header style={{ backgroundColor: 'var(--text-primary)', width: '100%', overflow: 'hidden' }}>
-        <div className="mx-auto w-full max-w-md" style={{ padding: '16px 16px 12px 16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <motion.div whileTap={{ scale: 0.97 }} transition={{ duration: duration(100) }}>
-              <button
-                type="button"
-                onClick={() => navigate(withLang(backTo))}
-                aria-label={t('nav.back', { defaultValue: 'Back' })}
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  width: '44px',
-                  height: '44px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'var(--text-light)',
-                }}
-              >
-                <MdArrowBack size={22} />
-              </button>
-            </motion.div>
+      <header style={{ width: '100%' }}>
+        <div style={{ position: 'relative', width: '100%', height: '563px', overflow: 'hidden' }}>
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '449px', overflow: 'hidden' }}>
+            <img
+              src={`/illustrations/${scenario.slug}.png`}
+              alt=""
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                display: 'block',
+                pointerEvents: 'none',
+              }}
+            />
 
-            <LanguageToggle variant="dark" />
+            <GlobalNavBar backTo={backTo} style={{ height: '44px' }} />
           </div>
 
-          <div style={{ marginTop: '4px' }}>
+          <div
+            style={{
+              position: 'absolute',
+              top: '449px',
+              left: 0,
+              right: 0,
+              height: '114px',
+              background: 'linear-gradient(to right, #2E2724 0%, #7B4B29 100%)',
+            }}
+          />
+
+          <div className="mx-auto w-full max-w-md" style={{ position: 'absolute', top: '449px', left: 0, right: 0, height: '114px', padding: '12px 16px 0 16px' }}>
             <h1
               style={{
                 fontFamily: 'Lora',
@@ -674,18 +669,17 @@ export default function ScenarioDetail() {
                 letterSpacing: '-0.3px',
                 color: 'var(--text-light)',
                 textAlign: 'left',
-                margin: '6px 0 0 0',
+                margin: 0,
               }}
             >
               {scenario.scenarioTitle || ''}
             </h1>
-
             <p
               style={{
                 fontFamily: 'Source Sans 3',
                 fontWeight: 400,
-                fontSize: '14px',
-                lineHeight: '22px',
+                fontSize: '16px',
+                lineHeight: '26px',
                 color: 'var(--text-light)',
                 textAlign: 'left',
                 margin: '6px 0 0 0',
@@ -699,7 +693,7 @@ export default function ScenarioDetail() {
 
       <motion.main
         className="mx-auto w-full max-w-md"
-        style={{ padding: '0 16px', marginTop: '36px' }}
+        style={{ padding: '24px 16px 0 16px' }}
         variants={accordionContainerVariants}
         initial="hidden"
         animate="show"
@@ -724,29 +718,19 @@ export default function ScenarioDetail() {
       </motion.main>
 
       <footer className="mx-auto w-full max-w-md" style={{ padding: '16px 16px 24px 16px' }}>
-        <MotionLink style={{ display: 'block', width: '100%' }}>
-          <button
-            type="button"
-            onClick={() =>
-              navigate(withLang('/scenarios'), { state: { fromScenarioPath: location.pathname } })
-            }
-            style={{
-              border: 'none',
-              background: 'transparent',
-              padding: 0,
-              textAlign: 'left',
-              width: '100%',
-              fontFamily: 'Source Sans 3',
-              fontWeight: 400,
-              fontSize: '14px',
-              lineHeight: '22px',
-              color: 'var(--text-primary)',
-              marginBottom: '4px',
-            }}
-          >
-            {t('scenario_detail.footer.prompt')}
-          </button>
-        </MotionLink>
+        <div
+          style={{
+            fontFamily: 'Source Sans 3',
+            fontWeight: 400,
+            fontSize: '14px',
+            lineHeight: '22px',
+            color: 'var(--text-primary)',
+            textAlign: 'left',
+            marginBottom: '4px',
+          }}
+        >
+          {t('scenario_detail.footer.prompt')}
+        </div>
         <MotionLink style={{ display: 'block', width: '100%' }}>
           <button
             type="button"
