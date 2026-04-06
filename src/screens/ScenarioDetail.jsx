@@ -745,8 +745,8 @@ export default function ScenarioDetail() {
   return (
     <div className="flex min-h-screen flex-col" style={{ backgroundColor: 'var(--background)' }}>
       <header style={{ width: '100%' }}>
-        <div style={{ position: 'relative', width: '100%', height: '563px', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '449px', overflow: 'hidden' }}>
+        <div style={{ position: 'relative', width: '100%' }}>
+          <div style={{ position: 'relative', width: '100%', height: '449px', overflow: 'hidden' }}>
             <img
               src={`/illustrations/${scenario.slug}.png`}
               alt=""
@@ -764,18 +764,8 @@ export default function ScenarioDetail() {
             <GlobalNavBar backTo={backTo} style={{ height: '44px' }} />
           </div>
 
-          <div
-            style={{
-              position: 'absolute',
-              top: '449px',
-              left: 0,
-              right: 0,
-              height: '114px',
-              background: 'linear-gradient(to right, #2E2724 0%, #7B4B29 100%)',
-            }}
-          />
-
-          <div className="mx-auto w-full max-w-md" style={{ position: 'absolute', top: '449px', left: 0, right: 0, height: '114px', padding: '12px 16px 0 16px' }}>
+          <div style={{ width: '100%', background: 'linear-gradient(to right, #2E2724 0%, #7B4B29 100%)' }}>
+            <div className="mx-auto w-full max-w-md" style={{ padding: '12px 16px 16px 16px' }}>
             <h1
               style={{
                 fontFamily: 'Lora',
@@ -803,6 +793,7 @@ export default function ScenarioDetail() {
             >
               {scenario.title || ''}
             </p>
+            </div>
           </div>
         </div>
       </header>
