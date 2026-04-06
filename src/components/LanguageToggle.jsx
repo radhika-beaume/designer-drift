@@ -19,13 +19,13 @@ export default function LanguageToggle({ variant = 'dark' }) {
 
   return (
     <div
-      className="inline-flex items-center gap-2"
+      className="inline-flex items-center gap-0"
       style={{ fontFamily: "'Azeret Mono', ui-monospace, monospace" }}
     >
       <button
         type="button"
         onClick={() => switchLang('en')}
-        className={`${base} flex min-h-[44px] min-w-[44px] items-center justify-center ${
+        className={`${base} flex min-h-[44px] min-w-[44px] items-center justify-end pr-1 ${
           current === 'en' ? active : inactive
         }`}
       >
@@ -43,11 +43,13 @@ export default function LanguageToggle({ variant = 'dark' }) {
           />
         </span>
       </button>
-      <span className={`${base} opacity-40`}>|</span>
+      <span className={`${base} opacity-40`} style={{ margin: '0 4px' }}>
+        |
+      </span>
       <button
         type="button"
         onClick={() => switchLang('fr')}
-        className={`${base} flex min-h-[44px] min-w-[44px] items-center justify-center ${
+        className={`${base} flex min-h-[44px] min-w-[44px] items-center justify-start pl-1 ${
           current === 'fr' ? active : inactive
         }`}
       >
