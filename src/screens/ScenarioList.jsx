@@ -1,8 +1,10 @@
+import { motion } from 'framer-motion'
 import { MdMenuBook } from 'react-icons/md'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import GlobalNavBar from '../components/GlobalNavBar.jsx'
 import scenarios from '../data/scenarios.js'
+import { reducedMotion, spring, duration } from '../motion.js'
 
 export default function ScenarioList() {
   const { t } = useTranslation()
@@ -56,7 +58,7 @@ export default function ScenarioList() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
           {scenarios.map((s) => (
-            <button
+            <motion.button
               key={s.id}
               type="button"
               onClick={() =>
@@ -64,10 +66,20 @@ export default function ScenarioList() {
                   state: { from: 'scenarios' },
                 })
               }
+              className="text-left transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal"
+              whileTap={{ scale: 0.97, backgroundColor: '#e8d8ce' }}
+              animate={{ scale: 1, backgroundColor: 'var(--surface-light)' }}
+              transition={
+                reducedMotion
+                  ? { duration: 0 }
+                  : {
+                      scale: { ...spring, duration: duration(100) },
+                      backgroundColor: { duration: duration(100), ease: 'easeOut' },
+                    }
+              }
               style={{
                 width: '100%',
                 textAlign: 'left',
-                backgroundColor: 'var(--surface-light)',
                 border: 'none',
                 borderBottom: '1px solid var(--border-chips)',
                 borderRadius: '4px',
@@ -132,7 +144,7 @@ export default function ScenarioList() {
                   </div>
                 </div>
               </div>
-            </button>
+            </motion.button>
           ))}
         </div>
       </main>
