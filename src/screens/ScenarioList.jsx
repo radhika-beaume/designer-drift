@@ -2,7 +2,7 @@ import { MdMenuBook } from 'react-icons/md'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import GlobalNavBar from '../components/GlobalNavBar.jsx'
-import { scenarios } from '../data/scenarios.js'
+import scenarios from '../data/scenarios.js'
 
 export default function ScenarioList() {
   const { t } = useTranslation()

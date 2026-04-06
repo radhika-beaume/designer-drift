@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import GlobalNavBar from '../components/GlobalNavBar.jsx'
 import MotionLink from '../components/MotionLink.jsx'
 
-const INVESTIGATE_URL = 'https://acharyaprashant.org'
+const INVESTIGATE_URL = 'https://medium.com/@radhikabeaume'
 
 export default function ExitFlow() {
   const { t } = useTranslation()

@@ -5,14 +5,14 @@ import { useTranslation } from 'react-i18next'
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import GlobalNavBar from '../components/GlobalNavBar.jsx'
 import MotionLink from '../components/MotionLink.jsx'
-import { scenarios } from '../data/scenarios.js'
+import scenarios from '../data/scenarios.js'
 import { easeIn, easeOut, reducedMotion, spring, duration } from '../motion.js'
 
 function findScenarioBySlug(slug) {
   return scenarios.find((s) => s.slug === slug) || null
 }
 
-function renderBlocks(blocks) {
+function renderBlocks(blocks, options = {}) {
   const rendered = []
 
   let pillBuffer = []
@@ -27,6 +27,7 @@ function renderBlocks(blocks) {
           flexWrap: 'wrap',
           gap: '8px',
           alignItems: 'flex-start',
+          marginBottom: options.pillGroupMarginBottom || 0,
         }}
       >
         {pillBuffer.map((b, idx) => (
@@ -83,12 +84,129 @@ function renderBlocks(blocks) {
       )
     }
 
+    const shouldSpaceQuotesToStrategy =
+      options.quoteToStrategySpacing === true && previousNonPillType === 'quote' && currentType === 'strategy'
+
+    if (shouldSpaceQuotesToStrategy) {
+      rendered.push(
+        <div
+          key={`quote-strategy-spacer-${idx}-${rendered.length}`}
+          style={{ height: '24px' }}
+        />
+      )
+    }
+
     rendered.push(<ContentBlock key={idx} block={block} />)
     previousNonPillType = currentType
   })
 
   flushPills()
   return rendered
+}
+
+function renderBodyTextBlock(block, idx) {
+  if (!block) return null
+
+  if (block.type === 'paragraph') {
+    return (
+      <p
+        key={`body-${idx}`}
+        style={{
+          fontFamily: 'Source Sans 3',
+          fontWeight: 400,
+          fontSize: '16px',
+          lineHeight: '26px',
+          color: 'var(--text-primary)',
+          textAlign: 'left',
+          margin: 0,
+        }}
+      >
+        {block.text || ''}
+      </p>
+    )
+  }
+
+  if (block.type === 'pull-quote') {
+    return (
+      <p
+        key={`body-${idx}`}
+        style={{
+          fontFamily: 'Lora',
+          fontWeight: 400,
+          fontStyle: 'italic',
+          fontSize: '20px',
+          lineHeight: '28px',
+          color: 'var(--text-primary)',
+          textAlign: 'left',
+          margin: 0,
+        }}
+      >
+        {block.text || ''}
+      </p>
+    )
+  }
+
+  if (block.type === 'illustration-paragraph') {
+    const medallionSrc = block.medallion ? `/${block.medallion}.png` : null
+
+    return (
+      <div
+        key={`body-${idx}`}
+        style={{
+          overflow: 'hidden',
+          background: 'rgba(79,67,62,0.10)',
+          borderLeft: '3px solid var(--accent)',
+          padding: '12px',
+          marginTop: '24px',
+          marginBottom: '24px',
+        }}
+      >
+        {medallionSrc ? (
+          <img
+            src={medallionSrc}
+            alt=""
+            aria-hidden="true"
+            style={{
+              width: '40px',
+              height: '40px',
+              objectFit: 'contain',
+              float: 'left',
+              marginRight: '8px',
+              marginBottom: '4px',
+            }}
+          />
+        ) : null}
+        <div
+          style={{
+            fontFamily: 'Source Sans 3',
+            fontWeight: 400,
+            fontSize: '16px',
+            lineHeight: '26px',
+            color: 'var(--text-primary)',
+            textAlign: 'left',
+          }}
+        >
+          {block.text || ''}
+        </div>
+      </div>
+    )
+  }
+
+  return null
+}
+
+function BodyTextSection({ blocks }) {
+  if (!Array.isArray(blocks) || blocks.length === 0) return null
+
+  return (
+    <section style={{ width: '100%', backgroundColor: 'var(--background)' }}>
+      <div className="mx-auto w-full max-w-md" style={{ padding: '16px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {blocks.map((b, idx) => renderBodyTextBlock(b, idx))}
+        </div>
+      </div>
+    </section>
+  )
 }
 
 function ContentBlock({ block }) {
@@ -265,8 +383,6 @@ function ContentBlock({ block }) {
 
         <div
           style={{
-            backgroundColor: 'rgba(79,67,62,0.15)',
-            borderLeft: '3px solid #077A98',
             padding: '8px',
             display: 'flex',
             flexDirection: 'column',
@@ -291,8 +407,8 @@ function ContentBlock({ block }) {
             style={{
               fontFamily: 'Source Sans 3',
               fontWeight: 400,
-              fontSize: '14px',
-              lineHeight: '22px',
+              fontSize: '16px',
+              lineHeight: '26px',
               color: 'var(--text-primary)',
               textAlign: 'left',
               margin: 0,
@@ -691,6 +807,8 @@ export default function ScenarioDetail() {
         </div>
       </header>
 
+      <BodyTextSection blocks={scenario.bodyText} />
+
       <motion.main
         className="mx-auto w-full max-w-md"
         style={{ padding: '24px 16px 0 16px' }}
@@ -710,7 +828,10 @@ export default function ScenarioDetail() {
               }
             >
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {renderBlocks(s.blocks)}
+                {renderBlocks(s.blocks, {
+                  pillGroupMarginBottom: s.key === 'brain' ? '16px' : 0,
+                  quoteToStrategySpacing: s.key === 'coping',
+                })}
               </div>
             </AccordionItem>
           </motion.div>
@@ -726,6 +847,7 @@ export default function ScenarioDetail() {
             lineHeight: '22px',
             color: 'var(--text-primary)',
             textAlign: 'left',
+            marginTop: '40px',
             marginBottom: '4px',
           }}
         >
@@ -756,11 +878,10 @@ export default function ScenarioDetail() {
         </MotionLink>
 
         <MotionLink style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-          <button
-            type="button"
-            onClick={() =>
-              navigate(withLang('/exit'), { state: { fromScenarioPath: location.pathname } })
-            }
+          <a
+            href="https://medium.com/@radhikabeaume"
+            target="_blank"
+            rel="noreferrer"
             style={{
               border: 'none',
               background: 'transparent',
@@ -783,7 +904,7 @@ export default function ScenarioDetail() {
             <span style={{ display: 'inline-flex' }}>
               <MdArrowForward size={16} color={'#077A98'} />
             </span>
-          </button>
+          </a>
         </MotionLink>
       </footer>
     </div>

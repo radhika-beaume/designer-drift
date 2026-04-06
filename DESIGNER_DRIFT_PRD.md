@@ -1,5 +1,5 @@
 # Designer_Drift — Product Requirements Document
-Version 1.0 — March 2026
+Version 1.1 — April 2026
 Last verified against Figma: March 2026
 
 **Figma is the absolute source of truth. Where PRD and Figma conflict, Figma wins.**
@@ -368,7 +368,7 @@ Figma node: 100:366
 #### Illustration Header
 | Property | Value |
 |---|---|
-| Illustration zone height | 449px, full width |
+| Illustration zone height | 282px, full width |
 | Illustration files | public/illustrations/[scenario-slug].png |
 | Gradient overlay | linear-gradient(to right, #2E2724 0%, #7B4B29 100%) over bottom portion of illustration |
 | Title text | `scenarioTitle` field |
@@ -379,8 +379,18 @@ Figma node: 100:366
 |Home icon | Middle,MdHome,#F6E9CD, 44×44px  — same dark bar |
 | Language toggle | Top right, same row as back arrow, #F6E9CD text — same dark bar |
 
+#### Body Text Section
+Renders below the illustration header and above the accordions. Reads from `bodyText[]` array in scenarios.js. Padding: 16px horizontal, 16px vertical. Background: #DDCFC5.
+Three content types:
+
+| Type | Spec |
+|---|---|
+| `paragraph` | Source Sans 3 Regular 16px, #2E2724, line-height 26px, 16px horizontal padding |
+| `pull-quote` | Lora Italic 20px, #2E2724, line-height 28px, 16px horizontal padding |
+| `illustration-paragraph` | Medallion 40×40px top-left, flex row layout (medallion fixed left, text in flex column beside it). Background: #4F433E at 10% opacity. Left stroke: 3px solid #077A98. Medallion file: `public/{medallion}.png` where `{medallion}` is the value from data (e.g. `Medaillon_Scenario1`). Margin-right on medallion: 8px. |
+
 #### Accordion Sections
-Each scenario has 4 accordion sections. All sections are collapsed by default (Screen 2). Tapping a header opens it (Screen 3). Only one section can be open at a time.
+Each scenario has 2 accordion sections. All sections are collapsed by default (Screen 2). Tapping a header opens it (Screen 3). Only one section can be open at a time.
 
 Each accordion section has TWO text elements:
 - **Label** (top): Azeret Mono 10px, uppercase, letter-spacing 1.5px, color #077A98 — category label
@@ -388,10 +398,11 @@ Each accordion section has TWO text elements:
 
 | Section | Label | Heading |
 |---|---|---|
-| 1 | RECOGNITION | When this happens |
-| 2 | YOUR WORKAROUND | What most designers do |
-| 3 | NEUROSCIENCE | What's happening in your brain |
-| 4 | THE ROOT CAUSE | The source of pain |
+| 1 | YOU ARE NOT ALONE | What other designers say |
+| 2 | NEUROSCIENCE | What's happening in your brain |
+
+
+**"You might feel"** renders as a hardcoded bold label inside the NEUROSCIENCE accordion body, above the pills row. Source Sans 3 SemiBold 16px, #2E2724.
 
 #### Accordion Header (Collapsed — Tappable)
 | Property | Value |
@@ -412,10 +423,13 @@ Each accordion section has TWO text elements:
 | Icon on header when open | MdExpandLess (Material) |
 
 #### Content Visual Treatments Inside Accordion Body
-Three distinct visual treatments — never use uniform text blocks:
+Four distinct visual treatments — never use uniform text blocks:
 - **Situation descriptions**: plain paragraphs, Source Sans 3 Regular 16px, #2E2724
 - **Body feelings / emotional states**: pills — hugs content, NOT full width, flows inline with siblings (flex-wrap: wrap, gap: 8px). Border 1px solid #E4AD86, border-radius 16px, padding 8px 4px, Source Sans 3 Regular 14px, #4F433E
 - **Designer quotes**: left border 3px solid #077A98, italic, Source Sans 3 Regular 16px, #4F433E, padding-left 12px
+- **Coping strategies**: left border 2px solid #E4AD86, action text Source Sans 3 Regular 16px #2E2724, thought text Source Sans 3 Italic 14px #2E2724 directly below. No icon.
+
+
 
 #### Footer of Scenario Detail
 | Property | Value |
@@ -517,73 +531,56 @@ export const scenarios = [
     slug: 'expertise-bypass',
     label: 'SITUATION',
     scenarioTitle: 'Expertise Bypass',
-    title: "If my work doesn't count, do I still count?",
+    title: "If it's ignored, I don't know where I stand.",
     trigger: "You weren't in the meeting. The decisions were made. You're expected to execute.",
+    bodyText: [
+      { type: 'paragraph', text: '...' },
+      { type: 'pull-quote', text: '...' },
+      { type: 'illustration-paragraph', text: '...', medallion: 'Medaillon_Scenario1' },
+    ],
     sections: [
-      { id: 'when', sectionLabel: 'RECOGNITION', heading: 'When this happens', content: [] },
-      { id: 'coping', sectionLabel: 'YOUR WORKAROUND', heading: 'What most designers do', content: [] },
+      { id: 'coping', sectionLabel: 'YOU ARE NOT ALONE', heading: 'What other designers say', content: [] },
       { id: 'brain', sectionLabel: 'NEUROSCIENCE', heading: "What's happening in your brain", content: [] },
-      { id: 'vedanta', sectionLabel: 'THE ROOT CAUSE', heading: 'The source of pain', content: [] },
     ]
   },
-  {
-    id: 'scenario-2',
-    slug: 'strategic-exclusion',
-    label: 'SITUATION',
-    scenarioTitle: 'Exclusion from Strategic Decisions',
-    title: "If I'm not invited, am I still at execution level?",
-    trigger: "You're doing the work but not in the room where it's shaped. You find out what was decided, not why.",
-    sections: [
-      { id: 'when', sectionLabel: 'RECOGNITION', heading: 'When this happens', content: [] },
-      { id: 'coping', sectionLabel: 'YOUR WORKAROUND', heading: 'What most designers do', content: [] },
-      { id: 'brain', sectionLabel: 'NEUROSCIENCE', heading: "What's happening in your brain", content: [] },
-      { id: 'vedanta', sectionLabel: 'THE ROOT CAUSE', heading: 'The source of pain', content: [] },
-    ]
-  },
-  {
-    id: 'scenario-3',
-    slug: 'authority-override',
-    label: 'SITUATION',
-    scenarioTitle: 'Authority Override',
-    title: "Does truth matter at all here?",
-    trigger: "You brought evidence. They brought hierarchy. The decision was already made before you spoke.",
-    sections: [
-      { id: 'when', sectionLabel: 'RECOGNITION', heading: 'When this happens', content: [] },
-      { id: 'coping', sectionLabel: 'YOUR WORKAROUND', heading: 'What most designers do', content: [] },
-      { id: 'brain', sectionLabel: 'NEUROSCIENCE', heading: "What's happening in your brain", content: [] },
-      { id: 'vedanta', sectionLabel: 'THE ROOT CAUSE', heading: 'The source of pain', content: [] },
-    ]
-  },
-  {
-    id: 'scenario-4',
-    slug: 'opaque-evaluation',
-    label: 'SITUATION',
-    scenarioTitle: 'Opaque Evaluation',
-    title: "Who will plan and track my progress, if not me?",
-    trigger: "You don't know what good looks like here. The goalposts move and nobody tells you where they are.",
-    sections: [
-      { id: 'when', sectionLabel: 'RECOGNITION', heading: 'When this happens', content: [] },
-      { id: 'coping', sectionLabel: 'YOUR WORKAROUND', heading: 'What most designers do', content: [] },
-      { id: 'brain', sectionLabel: 'NEUROSCIENCE', heading: "What's happening in your brain", content: [] },
-      { id: 'vedanta', sectionLabel: 'THE ROOT CAUSE', heading: 'The source of pain', content: [] },
-    ]
-  }
+  // ... repeat shape for scenarios 2, 3, 4
 ]
 ```
+
+**Field rendering map:**
+| Field | Renders in | Style |
+|---|---|---|
+| `slug` | URL: /scenario/:slug | — |
+| `label` | Not rendered — always "SITUATION", reserved for future use | — |
+| `scenarioTitle` | Scenario Detail illustration header — title line + Scenario List card title | Lora SemiBold 24px, #F6E9CD (header) / Lora Bold, #2E2724 (card) |
+| `title` | Scenario Detail illustration header — subtitle line | Source Sans 3 Regular 16px, #F6E9CD |
+| `trigger` | Scenario List card description only | Source Sans 3 Regular 16px, #4F433E |
+| `bodyText[]` | Body text section between illustration and accordions | See body text types below |
+| `sections[].sectionLabel` | Accordion header — label | Azeret Mono 10px, #077A98, uppercase |
+| `sections[].heading` | Accordion header — heading | Lora Medium 500, 20px, #2E2724 |
+| `sections[].introLine` | Hardcoded intro line above WHAT OTHERS SAY accordion | Source Sans 3 Regular 14px, #4F433E |
 ```
 
 ### 8.2 Content Types
 
+**Body text types (render in bodyText[] section above accordions):**
+
 | Type | Rendering |
 |---|---|
-| paragraph | Plain body text — Source Sans 3 Regular 16px, #2E2724, left-aligned |
-| subsection-label | Standalone heading — Source Sans 3 SemiBold 16px, #2E2724. Used for: "You might feel", "Other designers say", "Why this helps temporarily?", "Why this doesn't solve it?" |
-| quote | Designer quote — left border 3px solid #077A98, Source Sans 3 Italic 16px, #4F433E, padding-left 8px |
-| pill | Body feeling — hugs content, NOT full width, flex-wrap: wrap, gap: 8px. Border 1px solid #E4AD86, border-radius 16px,  padding 8px 4px, Source Sans 3 Regular 14px, #4F433E. NO text-transform: uppercase — render Title Case exactly as written in data |
-| strategy | Left border + two lines Left border 2px solid #E4AD86. Action text: Source Sans 3 Regular 16px, #2E2724. Thought text: Source Sans 3 Italic 14px, #2E2724, directly below. No icon. |
-| neuroscience-card | Composite block — title (Source Sans 3 SemiBold 16px, #2E2724) → introText (Source Sans 3 Regular 14px, #2E2724) → highlight block (background rgba(79,67,62,0.15), left border 3px solid #077A98, padding 8px: highlightLabel Azeret Mono 10px #077A98 uppercase, highlightBody Source Sans 3 Regular 14px #2E2724) → trailingText (Source Sans 3 Regular 14px, #2E2724, 4px gap below highlight). Cards separated by divider. |
-| vedanta-card | Composite block — title (Azeret Mono 10px, #077A98, uppercase, letter-spacing 1.5px — renders as label NOT heading) → insightText (Lora Italic 20px, line-height 28px, letter-spacing 0, #4F433E) → body (Source Sans 3 Regular 16px, #2E2724). Cards separated by divider. |
-| divider | Between neuroscience-cards and vedanta-cards — #E4AD86, ~50% width centered, 1px height, margin 12px top and bottom |
+| `paragraph` | Plain body text — Source Sans 3 Regular 16px, #2E2724, line-height 26px |
+| `pull-quote` | Lora Italic 20px, #2E2724, line-height 28px |Used for: the philosophical insight embedded in body text, and the concluding question at the end of each scenario.
+| `illustration-paragraph` | Flex row: medallion 40×40px fixed left (margin-right 8px), text in flex column beside it. Background: #4F433E at 10% opacity. Left stroke: 3px solid #077A98. Medallion src: `public/{medallion}.png` |
+
+**Accordion content types:**
+
+| Type | Rendering |
+|---|---|
+| `paragraph` | Plain body text — Source Sans 3 Regular 16px, #2E2724, left-aligned |
+| `quote` | Designer quote — left border 3px solid #077A98, Source Sans 3 Italic 16px, #4F433E, padding-left 8px |
+| `pill` | Body feeling — hugs content, NOT full width, flex-wrap: wrap, gap: 8px. Border 1px solid #E4AD86, border-radius 16px, padding 8px 4px, Source Sans 3 Regular 14px, #4F433E. NO text-transform: uppercase — render Title Case exactly as written in data |
+| `strategy` | Left border 2px solid #E4AD86. Action text: Source Sans 3 Regular 16px, #2E2724. Thought text: Source Sans 3 Italic 14px, #2E2724, directly below. No icon. |
+| `neuroscience-card` | Composite block — title (Source Sans 3 SemiBold 16px, #2E2724) → highlight block (no background, no left border, padding 8px: highlightLabel Azeret Mono 10px #077A98 uppercase, highlightBody Source Sans 3 Regular 16px #2E2724). Cards separated by divider. **No introText. No trailingText.** |
+| `divider` | Between neuroscience-cards — #E4AD86, ~50% width centered, 1px height, margin 12px top and bottom |
 
 ### 8.3 i18n String Keys
 All UI strings (not scenario content) are in the translation files. For MVP, en.json and fr.json are identical.
@@ -741,7 +738,34 @@ Build `src/screens/ExitFlow.jsx`. Full screen spec in Section 7 Screen 5.
 
 ---
 
-### Module 8 — QA & PWA Validation
+### Module 9 — Scenario Detail Restructure (IN PROGRESS)
+
+Structural changes to `src/screens/ScenarioDetail.jsx` and `src/data/scenarios.js`.
+
+**`scenarios.js` has already been replaced** with the new version. Do not overwrite it.
+
+**Changes to implement in ScenarioDetail.jsx:**
+
+1. **Illustration height**: Reduce illustration zone height from 449px to 282px.
+
+2. **Remove RECOGNITION accordion**: Remove any code rendering the section with `id: 'when'`. If sections are rendered via loop, this resolves automatically since `when` no longer exists in data.
+
+3. **Remove ROOT CAUSE accordion**: Remove any code rendering the section with `id: 'vedanta'`. Same logic applies.
+
+4. **Add body text section**: Between the illustration header and the accordions, render the `bodyText[]` array from scenario data. Use a `BodyTextRenderer` component that maps three types:
+   - `paragraph` → Source Sans 3 Regular 16px, #2E2724
+   - `pull-quote` → Lora Italic 20px, #2E2724
+   - `illustration-paragraph` → flex row, medallion 40×40px left (margin-right 8px), text beside it. Background: #4F433E at 10% opacity. Left stroke: 3px solid #077A98. Medallion src: `/public/{block.medallion}.png`
+
+5. **Rename WORKAROUND accordion**: Section `id: 'coping'` now has `sectionLabel: 'YOU ARE NOT ALONE '` and `heading: 'What other designers say'`. This renders automatically from data — no hardcoded label changes needed in component.
+
+7. **Add pills row in NEUROSCIENCE accordion**: Pills now appear in the brain section `content[]` array before the neuroscience-cards. Render them as a flex-wrap row. Above the pills row, render a hardcoded "You might feel" label: Source Sans 3 SemiBold 16px, #2E2724.
+
+8. **Update neuroscience-card renderer**: Cards now have only `title + highlightLabel + highlightBody`. Remove rendering of `introText` and `trailingText`. Highlight block opacity: rgba(79,67,62,0.10).
+
+9. **Remove workaround subsection labels**: The `strategy` items in coping section no longer have "WHY THIS HELPS" / "WHY THIS DOESN'T SOLVE IT" subsection-label blocks above them. These were removed from data — no code change needed if renderer loops over content[].
+
+---
 
 #### 8.1 Visual QA
 - Test all screens at 390px viewport width
