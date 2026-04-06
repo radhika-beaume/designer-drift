@@ -16,6 +16,7 @@
     "no_match": "This doesn't match what happened?"
   },
   "followup": {
+    "title": "I was excluded from strategic meetings",
     "subtitle": "Which sounds closer?",
     "option_a": "Decisions were made about my design work without me",
     "option_b": "My strategic role was not recognized"
