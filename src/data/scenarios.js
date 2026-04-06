@@ -95,7 +95,7 @@ const scenarios = [
         content: [
           { type: "quote", text: "\"Pas de mots sur le moment, je ne savais pas comment réagir !\"" },
           { type: "quote", text: "\"Je voulais fermer l'ordinateur.\"" },
-          { type: "quote", text: "\"Plus rien de faire pour ce projet\"" },
+          { type: "quote", text: "\"Plus rien à faire pour ce projet\"" },
           { type: "strategy", action: "Vent to colleagues or friends", thought: "\"They're being unfair. Anyone would feel sidelined here.\"" },
           { type: "strategy", action: "Argue back or present more evidence", thought: "\"If I explain it better, they'll see the value.\"" },
           { type: "strategy", action: "Step away — take a walk, get food, listen to music", thought: "\"I just need distance so this doesn't get to me.\"" },
@@ -193,7 +193,7 @@ const scenarios = [
     
         content: [
           { type: "quote", text: "\"Plus rien de faire pour ce projet.\"" },
-          { type: "quote", text: "\"Si ils veulent faire sans moi, ils le feront.\"" },
+          { type: "quote", text: "\"S'ils veulent faire sans moi, ils le feront.\"" },
           { type: "strategy", action: "Push back with the PO/PM", thought: "\"If I assert myself, they'll recognize I belong at that level.\"" },
           { type: "strategy", action: "Compare yourself to other designers", thought: "\"They're ahead. I'm behind. Another company will place me correctly.\"" },
           { type: "strategy", action: "Vent to other designers", thought: "\"They don't value design strategically. The system is broken.\"" },
