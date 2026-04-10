@@ -83,33 +83,24 @@ export default function EntryScreen() {
         style={{ background: 'linear-gradient(to right, #2E2724 0%, #7B4B29 100%)', width: '100%', overflow: 'hidden' }}
       >
         <div className="mx-auto w-full max-w-md">
-          <div
-            style={{
-              position: 'relative',
-              height: '109px',
-              padding: '16px 8px 8px 16px',
-            }}
-          >
-            <div style={{ position: 'absolute', top: '16px', right: '8px' }}>
+          <div style={{ padding: '16px 8px 8px 16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '8px' }}>
               <LanguageToggle variant="dark" />
             </div>
-            <div style={{ position: 'absolute', bottom: '8px', left: '16px' }}>
-              <h1
-                className="text-left"
-                style={{
-                  fontFamily: 'Lora',
-                  fontWeight: 700,
-                  fontSize: '32px',
-                  lineHeight: '40px',
-                  letterSpacing: '-0.5px',
-                  color: 'var(--text-light)',
-                  whiteSpace: 'nowrap',
-                  margin: 0,
-                }}
-              >
-                {t('entry.title')}
-              </h1>
-            </div>
+            <h1
+              className="text-left"
+              style={{
+                fontFamily: 'Lora',
+                fontWeight: 700,
+                fontSize: '32px',
+                lineHeight: '40px',
+                letterSpacing: '-0.5px',
+                color: 'var(--text-light)',
+                margin: 0,
+              }}
+            >
+              {t('entry.title')}
+            </h1>
           </div>
           <div style={{ padding: '0 16px 8px 16px' }}>
             <p

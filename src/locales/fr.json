@@ -50,7 +50,7 @@
       }
     },
     "footer": {
-      "prompt": "Ça ne correspond pas tout à fait à ce qui s'est passé ?",
+      "prompt": "Ça ne correspond pas tout à fait à ce qui s'est passé\u00A0?",
       "link": "Voir les autres situations →"
     }
   },
