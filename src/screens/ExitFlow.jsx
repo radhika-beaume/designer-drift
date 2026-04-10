@@ -97,7 +97,7 @@ export default function ExitFlow() {
                 textDecoration: 'none',
               }}
             >
-              {t('exit.investigate')} {'\u2192'}
+             {t('exit.investigate')}
             </a>
           </MotionLink>
         </div>
