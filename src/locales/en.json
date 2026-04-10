@@ -56,6 +56,6 @@
   },
   "exit": {
     "acknowledgment": "This pattern will repeat. You've started to see what's driving it. Keep recognizing it.",
-    "investigate": "If you want to investigate further"
+    "investigate": "If you want to investigate further →"
   }
 }

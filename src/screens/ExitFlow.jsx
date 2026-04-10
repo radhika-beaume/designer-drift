@@ -95,6 +95,7 @@ export default function ExitFlow() {
                 lineHeight: '22px',
                 color: 'var(--accent)',
                 textDecoration: 'none',
+                whiteSpace: 'nowrap',
               }}
             >
              {t('exit.investigate')}
