@@ -3,13 +3,16 @@ import { MdMenuBook } from 'react-icons/md'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import GlobalNavBar from '../components/GlobalNavBar.jsx'
-import scenarios from '../data/scenarios.js'
+import scenariosEn from '../data/scenarios.js'
+import scenariosFr from '../data/scenarios.fr'
 import { reducedMotion, spring, duration } from '../motion.js'
 
 export default function ScenarioList() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const location = useLocation()
   const navigate = useNavigate()
+
+  const scenarios = i18n.language === 'fr' ? scenariosFr : scenariosEn
 
   const withLang = (path) => {
     if (typeof path !== 'string') return path

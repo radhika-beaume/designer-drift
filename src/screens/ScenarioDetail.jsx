@@ -5,10 +5,11 @@ import { useTranslation } from 'react-i18next'
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import GlobalNavBar from '../components/GlobalNavBar.jsx'
 import MotionLink from '../components/MotionLink.jsx'
-import scenarios from '../data/scenarios.js'
+import scenariosEn from '../data/scenarios.js'
+import scenariosFr from '../data/scenarios.fr'
 import { easeIn, easeOut, reducedMotion, spring, duration } from '../motion.js'
 
-function findScenarioBySlug(slug) {
+function findScenarioBySlug(slug, scenarios) {
   return scenarios.find((s) => s.slug === slug) || null
 }
 
@@ -687,9 +688,10 @@ export default function ScenarioDetail() {
   const { slug } = useParams()
   const location = useLocation()
   const navigate = useNavigate()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
-  const scenario = slug ? findScenarioBySlug(slug) : null
+  const scenarios = i18n.language === 'fr' ? scenariosFr : scenariosEn
+  const scenario = slug ? findScenarioBySlug(slug, scenarios) : null
 
   const withLang = (path) => {
     if (typeof path !== 'string') return path
@@ -868,11 +870,10 @@ export default function ScenarioDetail() {
           </button>
         </MotionLink>
 
-        <MotionLink style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-          <a
-            href="https://medium.com/@radhikabeaume"
-            target="_blank"
-            rel="noreferrer"
+        <MotionLink style={{ display: 'block', width: '100%' }}>
+          <button
+            type="button"
+            onClick={() => navigate(withLang('/exit'), { state: { fromScenarioPath: location.pathname } })}
             style={{
               border: 'none',
               background: 'transparent',
@@ -883,19 +884,17 @@ export default function ScenarioDetail() {
               fontWeight: 600,
               fontSize: '14px',
               lineHeight: '22px',
-              color: '#077A98',
-              textDecoration: 'underline',
-              marginTop: '6px',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
+              color: 'var(--accent)',
+              marginBottom: '16px',
             }}
           >
-            <span>{t('nav.investigate')}</span>
-            <span style={{ display: 'inline-flex' }}>
-              <MdArrowForward size={16} color={'#077A98'} />
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <span>{t('nav.go_deeper')}</span>
+              <span style={{ display: 'inline-flex' }}>
+                <MdArrowForward size={16} color={'#077A98'} />
+              </span>
             </span>
-          </a>
+          </button>
         </MotionLink>
       </footer>
     </div>

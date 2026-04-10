@@ -3,58 +3,59 @@
     "title": "Designer Drift"
   },
   "chips": {
-    "01": "I wasn't invited to the design meeting",
-    "02": "I did research, nobody cares",
-    "03": "I was excluded from strategic meetings",
-    "04": "I was left alone for stakeholder management",
-    "05": "I was overruled by hierarchy",
-    "06": "My promotion was refused with no explanation"
+    "01": "Je n'ai pas été invité(e) à la réunion de design",
+    "02": "J'ai fait de la recherche, personne ne s'en soucie",
+    "03": "J'ai été écarté(e) des réunions stratégiques",
+    "04": "On m'a laissé(e) seul(e) pour gérer les parties prenantes",
+    "05": "La hiérarchie a eu le dernier mot",
+    "06": "Ma promotion a été refusée sans explication"
   },
   "entry": {
-    "title": "What happened?",
-    "subtitle": "Select what triggered you today",
-    "no_match": "This doesn't match what happened?"
+    "title": "Qu'est-ce qui s'est passé ?",
+    "subtitle": "Sélectionnez ce qui vous a déclenché aujourd'hui",
+    "no_match": "Ça ne correspond pas à ce qui s'est passé ?"
   },
   "followup": {
-    "title": "I was excluded from strategic meetings",
-    "subtitle": "Which sounds closer?",
-    "option_a": "Decisions were made about my design work without me",
-    "option_b": "My strategic role was not recognized"
+    "title": "J'ai été écarté(e) des réunions stratégiques",
+    "subtitle": "Laquelle de ces situations vous parle le plus ?",
+    "option_a": "Des décisions ont été prises sur mon travail de design sans moi",
+    "option_b": "Mon rôle stratégique n'a pas été reconnu"
   },
   "nav": {
-    "investigate": "If you want to investigate further"
+    "investigate": "Si vous voulez approfondir le sujet",
+    "go_deeper": "Aller plus loin"
   },
   "scenarios": {
-    "title": "All situations",
-    "subtitle": "One of these will feel familiar.",
+    "title": "Toutes les situations",
+    "subtitle": "L'une d'elles vous semblera familière.",
     "sections_count": "4 sections"
   },
   "scenario_detail": {
     "sections": {
       "recognition": {
-        "label": "RECOGNITION",
-        "heading": "When this happens"
+        "label": "RECONNAISSANCE",
+        "heading": "Quand cela arrive"
       },
       "workaround": {
-        "label": "YOUR WORKAROUND",
-        "heading": "What most designers do"
+        "label": "VOTRE STRATÉGIE",
+        "heading": "Ce que font la plupart des designers"
       },
       "neuroscience": {
-        "label": "NEUROSCIENCE",
-        "heading": "What's happening in your brain"
+        "label": "NEUROSCIENCES",
+        "heading": "Ce qui se passe dans votre cerveau"
       },
       "root_cause": {
-        "label": "THE ROOT CAUSE",
-        "heading": "The source of pain"
+        "label": "LA CAUSE PROFONDE",
+        "heading": "La source de la douleur"
       }
     },
     "footer": {
-      "prompt": "This doesn't quite match what happened?",
-      "link": "See other situations →"
+      "prompt": "Ça ne correspond pas tout à fait à ce qui s'est passé ?",
+      "link": "Voir les autres situations →"
     }
   },
   "exit": {
-    "acknowledgment": "This pattern will repeat. You've started to see what's driving it. Keep recognizing it.",
-    "investigate": "If you want to investigate further"
+    "acknowledgment": "Ce schéma se répétera. Vous avez commencé à voir ce qui le génère. Continuez à le reconnaître.",
+    "investigate": "Si vous voulez approfondir le sujet"
   }
 }

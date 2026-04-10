@@ -22,7 +22,8 @@
     "option_b": "My strategic role was not recognized"
   },
   "nav": {
-    "investigate": "If you want to investigate further"
+    "investigate": "If you want to investigate further",
+    "go_deeper": "Go deeper"
   },
   "scenarios": {
     "title": "All situations",
