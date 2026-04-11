@@ -98,7 +98,7 @@ const scenarios = [
           { type: "quote", text: "\"Plus rien à faire pour ce projet\"" },
           { type: "strategy", action: "Vent to colleagues or friends", thought: "\"They're being unfair. Anyone would feel sidelined here.\"" },
           { type: "strategy", action: "Argue back or present more evidence", thought: "\"If I explain it better, they'll see the value.\"" },
-          { type: "strategy", action: "Step away — take a walk, get food, listen to music", thought: "\"I just need distance so this doesn't get to me.\"" },
+          { type: "strategy", action: "Step away - take a walk, get food, listen to music", thought: "\"I just need distance so this doesn't get to me.\"" },
           { type: "strategy", action: "Emotionally detach from the project", thought: "\"Fine. I'll stop caring so it doesn't hurt.\"" },
           { type: "strategy", action: "Look for small wins elsewhere to regain control", thought: "\"If my work isn't valued here, I'll prove myself somewhere else.\"" },
           { type: "paragraph", text: "These work in the moment but only in the moment. The pattern repeats because none of these touches the source." }
@@ -182,7 +182,7 @@ const scenarios = [
             type: "neuroscience-card",
             title: "The loop that won't stop",
             highlightLabel: "UNRESOLVED LOOP",
-            highlightBody: "The Default Mode Network replays unresolved social threats — draining energy without producing answers. 'Why wasn't I included? What does this mean about me?' These questions run on a loop, draining you even when you haven't done much work."
+            highlightBody: "The Default Mode Network replays unresolved social threats, draining energy without producing answers. 'Why wasn't I included? What does this mean about me?' These questions run on a loop, fatigue felt even when you haven't done much work."
           }
         ]
       },
@@ -294,7 +294,7 @@ const scenarios = [
           { type: "strategy", action: "Moralize the situation", thought: "\"This is misleading. It's bad for users.\"" },
           { type: "strategy", action: "Attack competence", thought: "\"You don't understand this domain.\"" },
           { type: "strategy", action: "Use sarcasm or provocation", thought: "\"Sure, if that's what you want.\"" },
-          { type: "strategy", action: "Comply outwardly", thought: "\"Ok, ok.\" — while disagreeing completely." },
+          { type: "strategy", action: "Comply outwardly", thought: "\"Ok, ok.\" - while disagreeing completely." },
           { type: "strategy", action: "Vent intensely afterward", thought: "Replaying the scene, seeking allies to confirm you're right." },
           { type: "paragraph", text: "These strategies preserve one belief: 'If I do it better, it will work next time.' But effort and their decisions aren't connected the way you think. Power decides. Evidence is optional. The collision repeats." }
         ]
@@ -384,7 +384,7 @@ const scenarios = [
       
         content: [
           { type: "quote", text: "\"Porte qui se ferme.\"" },
-          { type: "quote", text: "\"On coupe l'herbe sous le pied.\"" },
+          { type: "quote", text: "\"On me coupe l'herbe sous le pied.\"" },
           { type: "quote", text: "\"Envie de me barrer.\"" },
           { type: "strategy", action: "Gather more credentials", thought: "\"If I build visible proof of growth, they'll have to recognize it.\"" },
           { type: "strategy", action: "Create your own tracking system", thought: "\"If they won't measure my progress, I will.\"" },
