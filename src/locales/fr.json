@@ -12,7 +12,7 @@
   },
   "entry": {
     "title": "Qu'est-ce qui s'est passé ?",
-    "subtitle": "Sélectionnez ce qui vous a déclenché aujourd'hui",
+    "subtitle": "Sélectionnez ce qui vous a affecté aujourd'hui",
     "no_match": "Ça ne correspond pas à ce qui s'est passé ?"
   },
   "followup": {
