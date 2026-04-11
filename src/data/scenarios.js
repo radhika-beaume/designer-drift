@@ -192,7 +192,7 @@ const scenarios = [
         heading: "What other designers say",
     
         content: [
-          { type: "quote", text: "\"Plus rien de faire pour ce projet.\"" },
+          { type: "quote", text: "\"Plus rien à faire pour ce projet.\"" },
           { type: "quote", text: "\"S'ils veulent faire sans moi, ils le feront.\"" },
           { type: "strategy", action: "Push back with the PO/PM", thought: "\"If I assert myself, they'll recognize I belong at that level.\"" },
           { type: "strategy", action: "Compare yourself to other designers", thought: "\"They're ahead. I'm behind. Another company will place me correctly.\"" },
