@@ -821,6 +821,21 @@ export default function ScenarioDetail() {
               }
             >
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {s.key === 'brain' ? (
+                  <div
+                    style={{
+                      fontFamily: 'Source Sans 3',
+                      fontWeight: 600,
+                      fontSize: '16px',
+                      lineHeight: '26px',
+                      color: '#2E2724',
+                      textAlign: 'left',
+                      margin: 0,
+                    }}
+                  >
+                    You might feel
+                  </div>
+                ) : null}
                 {renderBlocks(s.blocks, {
                   pillGroupMarginBottom: s.key === 'brain' ? '16px' : 0,
                   quoteToStrategySpacing: s.key === 'coping',
