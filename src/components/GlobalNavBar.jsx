@@ -18,7 +18,12 @@ export default function GlobalNavBar({ backTo = -1, style }) {
 
   const handleBack = (e) => {
     e?.stopPropagation()
-    navigate(typeof backTo === 'string' ? withLang(backTo) : backTo)
+    if (typeof backTo === 'string') {
+      navigate(withLang(backTo), { state: { preserveScroll: true } })
+      return
+    }
+
+    navigate(backTo)
   }
 
   const handleHome = (e) => {

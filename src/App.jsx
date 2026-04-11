@@ -4,6 +4,7 @@ import ScenarioList from './screens/ScenarioList.jsx'
 import ScenarioDetail from './screens/ScenarioDetail.jsx'
 import FollowupScreen from './screens/FollowupScreen.jsx'
 import ExitFlow from './screens/ExitFlow.jsx'
+import ScrollManager from './components/ScrollManager.jsx'
 
 function NotFoundRedirect() {
   const location = useLocation()
@@ -12,14 +13,17 @@ function NotFoundRedirect() {
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<EntryScreen />} />
-      <Route path="/scenarios" element={<ScenarioList />} />
-      <Route path="/scenario/:slug" element={<ScenarioDetail />} />
-      <Route path="/followup" element={<FollowupScreen />} />
-      <Route path="/exit" element={<ExitFlow />} />
-      <Route path="*" element={<NotFoundRedirect />} />
-    </Routes>
+    <>
+      <ScrollManager />
+      <Routes>
+        <Route path="/" element={<EntryScreen />} />
+        <Route path="/scenarios" element={<ScenarioList />} />
+        <Route path="/scenario/:slug" element={<ScenarioDetail />} />
+        <Route path="/followup" element={<FollowupScreen />} />
+        <Route path="/exit" element={<ExitFlow />} />
+        <Route path="*" element={<NotFoundRedirect />} />
+      </Routes>
+    </>
   )
 }
 
