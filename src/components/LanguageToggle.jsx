@@ -25,7 +25,7 @@ export default function LanguageToggle({ variant = 'dark' }) {
       <button
         type="button"
         onClick={() => switchLang('en')}
-        className={`${base} flex min-h-[44px] min-w-[44px] items-center justify-end pr-1 ${
+        className={`${base} flex min-h-[44px] min-w-[44px] items-center justify-center ${
           current === 'en' ? active : inactive
         }`}
       >
@@ -49,7 +49,7 @@ export default function LanguageToggle({ variant = 'dark' }) {
       <button
         type="button"
         onClick={() => switchLang('fr')}
-        className={`${base} flex min-h-[44px] min-w-[44px] items-center justify-start pl-1 ${
+        className={`${base} flex min-h-[44px] min-w-[44px] items-center justify-center ${
           current === 'fr' ? active : inactive
         }`}
       >
